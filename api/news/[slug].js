@@ -1,53 +1,34 @@
-import { getCachedNews } from "../../utils/cacheNews";
+const cacheHandler = require('../../../utils/cacheHandler');
+const contentParser = require('../../../utils/contentParser');
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   const { slug } = req.query;
-
+  
   try {
-    const news = await getCachedNews();
-    const article = news.find(n => n.slug === slug);
-
+    const cachedNews = cacheHandler.get('news') || [];
+    const article = cachedNews.find(a => a.slug === slug);
+    
     if (!article) {
-      return res.status(404).json({
-        success: false,
-        message: "❌ Article not found.",
-        creator: "Shinei Nouzen",
-        github: "https://github.com/Shineii86",
-        telegram: "https://telegram.me/Shineii86",
-        message: "Build with ❤️ by Shinei Nouzen",
-        timestamp: new Date().toLocaleString("en-IN", {
-          timeZone: "Asia/Kolkata",
-          hour12: true
-      })
-      });
+      return res.status(404).json({ error: 'Article not found' });
     }
-
-    res.status(200).json({
-      success: true,
-      article,
-      timestamp: new Date().toISOString(),
-      creator: "Shinei Nouzen",
-      github: "https://github.com/Shineii86",
-      telegram: "https://telegram.me/Shineii86",
-      message: "Build with ❤️ by Shinei Nouzen",
-      timestamp: new Date().toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-        hour12: true
-      })
-    });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "❌ Failed to fetch article.",
-      error: err.message,
-      creator: "Shinei Nouzen",
-      github: "https://github.com/Shineii86",
-      telegram: "https://telegram.me/Shineii86",
-      message: "Build with ❤️ by Shinei Nouzen",
-      timestamp: new Date().toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-        hour12: true
-      })
-    });
+    
+    // Check for cached content
+    const cachedArticle = cacheHandler.get(`article-${slug}`);
+    if (cachedArticle) {
+      return res.json(cachedArticle);
+    }
+    
+    // Fetch full content
+    const content = await contentParser.parseContent(article.link);
+    const fullArticle = { ...article, content };
+    
+    // Cache article content for 1 hour
+    cacheHandler.set(`article-${slug}`, fullArticle, 3600);
+    
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.json(fullArticle);
+  } catch (error) {
+    console.error('Article fetch error:', error);
+    res.status(500).json({ error: 'Failed to fetch article' });
   }
-}
+};
