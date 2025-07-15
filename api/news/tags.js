@@ -1,26 +1,26 @@
-// api/news/tags.js
-import { getCachedNews } from "../../utils/cacheNews";
+const cacheHandler = require('../../../utils/cacheHandler');
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   try {
-    const news = await getCachedNews();
-    const tags = [...new Set(news.flatMap(n => n.tags || []))];
-
-    res.status(200).json({
-      success: true,
-      count: tags.length,
-      tags,
-      timestamp: new Date().toISOString(),
-      creator: "Shinei Nouzen",
-      github: "https://github.com/Shineii86",
-      telegram: "https://telegram.me/Shineii86",
-      message: "Build with ❤️ by Shinei Nouzen",
-      timestamp: new Date().toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-        hour12: true
-      })
+    const cachedTags = cacheHandler.get('tags');
+    if (cachedTags) {
+      return res.json(cachedTags);
+    }
+    
+    const cachedNews = cacheHandler.get('news') || [];
+    const tags = new Set();
+    
+    cachedNews.forEach(article => {
+      article.tags.forEach(tag => tags.add(tag.toLowerCase()));
     });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    
+    const tagList = Array.from(tags).sort();
+    cacheHandler.set('tags', tagList);
+    
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.json(tagList);
+  } catch (error) {
+    console.error('Tags error:', error);
+    res.status(500).json({ error: 'Failed to fetch tags' });
   }
-}
+};
