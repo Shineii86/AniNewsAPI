@@ -11,6 +11,6 @@
     { "src": "/api/news/([^/]+)", "dest": "api/news/[slug].js" },
     { "src": "/api/news", "dest": "api/news/index.js" },
     { "src": "/(.*)", "dest": "/" },
-    { "src": "/(.*)", "dest": "/index.js }
+    { "src": "/(.*)", "dest": "/index.js" }
   ]
 }
