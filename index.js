@@ -3,7 +3,7 @@ import path from "path";
 
 export default function handler(req, res) {
   try {
-    const filePath = path.join(process.cwd(), "index.html");
+    const filePath = path.join(process.cwd(), "public", "index.html");
     const html = fs.readFileSync(filePath, "utf8");
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
