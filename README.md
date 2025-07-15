@@ -11,7 +11,7 @@
 [![API Status](https://img.shields.io/website?down_color=lightgrey&down_message=offline&label=API%20Status&style=for-the-badge&up_color=green&up_message=online&url=https%3A%2F%2Faninews.vercel.app)](https://aninews.vercel.app)
 
 
-> A real-time, blazing-fast, tag-filterable Anime News API that fetches fresh articles from [Crunchyroll](https://www.crunchyroll.com/news) and [Anime News Network](https://www.animenewsnetwork.com/), with optional smart caching for reliability.
+> 🛰️ A real-time, blazing-fast, tag-filterable Anime News API that fetches fresh articles from [Crunchyroll](https://www.crunchyroll.com/news) and [Anime News Network](https://www.animenewsnetwork.com/), with optional smart caching for reliability.
 
 ---
 
@@ -81,7 +81,7 @@ GET /api/news/demon-slayer-kimetsu-no-yaiba-season-3-announced
 
 ## 🚀 How to Use
 
-### 1. Clone and Install
+### 1. 👾 Clone and Install
 
 ```bash
 git clone https://github.com/Shineii86/AniNewsAPI
@@ -89,14 +89,14 @@ cd AniNewsAPI
 npm install
 ```
 
-### 2. Run Locally
+### 2. 🚗 Run Locally
 
 ```bash
 npm run dev
 # Visit http://localhost:3000/api/news
 ```
 
-### 3. Deploy to Vercel
+### 3. 🚀 Deploy to Vercel
 
 > 🔗 [https://vercel.com](https://vercel.com)
 
@@ -149,7 +149,7 @@ AniNewsAPI/
 
 ## 📬 Support
 
-* Issues: [GitHub Issues](https://github.com/Shineii86/AniRecommendAPI/issues)
+* Issues: [GitHub Issues](https://github.com/Shineii86/AniNewsAPI/issues)
 
 ## 🪪 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -157,9 +157,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 💕 Loved My Work?
 🚨 [Follow me on GitHub](https://github.com/Shineii86/Shineii86)
 
-⭐ [Give a star to this project](https://github.com/Shineii86/AniRecommendAPI/)
+⭐ [Give a star to this project](https://github.com/Shineii86/AniNewsAPI/)
 
-<a href="https://github.com/Shineii86/AniRecommendAPI">
+<a href="https://github.com/Shineii86/AniNewsAPI">
 <img src="https://github.com/Shineii86/AniPay/blob/main/Source/Banner6.png" alt="Banner">
 </a>
 
