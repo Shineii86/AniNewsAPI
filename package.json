@@ -1,5 +1,5 @@
 {
-  "name": "aninewsapi",
+  "name": "aninews",
   "version": "1.0.0",
   "description": "🔎 Real-time Anime News API that scrapes live articles from Crunchyroll & ANN — supports smart caching, full article parsing, tags, and Vercel hosting.",
   "main": "api/news.js",
@@ -20,7 +20,10 @@
     "otaku"
   ],
   "author": "Shinei Nouzen",
-  "github": "https://github.com/Shineii86/AniNews",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shineii86/AniNewsAPI"
+  },
   "license": "MIT",
   "dependencies": {
     "axios": "^1.6.0",
