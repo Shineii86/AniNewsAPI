@@ -1,56 +1,35 @@
-import { getCachedNews } from "../utils/cacheNews";
+const cacheHandler = require('../utils/cacheHandler');
+const fetchCrunchyroll = require('../utils/fetchCrunchyroll');
+const fetchANN = require('../utils/fetchANN');
 
-export default async function handler(req, res) {
-  const { limit = 10, sort = "latest", source = "all" } = req.query;
-
+module.exports = async (req, res) => {
   try {
-    const news = await getCachedNews(parseInt(limit), source.toLowerCase());
-
-    if (!news.length) {
-      return res.status(200).json({
-        success: false,
-        message: "⚠️ No news found. Try again later.",
-        timestamp: new Date().toISOString(),
-        creator: "Shinei Nouzen",
-        github: "https://github.com/Shineii86",
-        telegram: "https://telegram.me/Shineii86",
-        message: "Build with ❤️ by Shinei Nouzen",
-        timestamp: new Date().toLocaleString("en-IN", {
-          timeZone: "Asia/Kolkata",
-          hour12: true
-      })
-      });
+    // Check cache first
+    const cachedNews = cacheHandler.get('news');
+    if (cachedNews) {
+      return res.json(cachedNews);
     }
-
-    const sorted = sort === "oldest" ? [...news].reverse() : news;
-
-    res.status(200).json({
-      success: true,
-      count: sorted.length,
-      data: sorted,
-      timestamp: new Date().toISOString(),
-      creator: "Shinei Nouzen",
-      github: "https://github.com/Shineii86",
-      telegram: "https://telegram.me/Shineii86",
-      message: "Build with ❤️ by Shinei Nouzen",
-      timestamp: new Date().toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-        hour12: true
-      })
-    });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "❌ Failed to fetch news.",
-      error: err.message,
-      creator: "Shinei Nouzen",
-      github: "https://github.com/Shineii86",
-      telegram: "https://telegram.me/Shineii86",
-      message: "Build with ❤️ by Shinei Nouzen",
-      timestamp: new Date().toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-        hour12: true
-      })
-    });
+    
+    // Fetch from sources concurrently
+    const [crunchyrollNews, annNews] = await Promise.allSettled([
+      fetchCrunchyroll(),
+      fetchANN()
+    ]);
+    
+    // Combine and sort results
+    const allNews = [
+      ...(crunchyrollNews.value || []),
+      ...(annNews.value || [])
+    ].sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // Update cache
+    cacheHandler.set('news', allNews);
+    
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'public, max-age=600');
+    res.json(allNews);
+  } catch (error) {
+    console.error('API error:', error);
+    res.status(500).json({ error: 'Failed to fetch news' });
   }
-}
+};
