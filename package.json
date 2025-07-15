@@ -1,0 +1,31 @@
+{
+  "name": "aninewsapi",
+  "version": "1.0.0",
+  "description": "🔎 Real-time Anime News API that scrapes live articles from Crunchyroll & ANN — supports smart caching, full article parsing, tags, and Vercel hosting.",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "anime",
+    "news",
+    "api",
+    "crunchyroll",
+    "scraper",
+    "serverless",
+    "vercel",
+    "ann",
+    "otaku"
+  ],
+  "author": "Shinei Nouzen",
+  "github": "https://github.com/Shineii86/AniNews",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12"
+  },
+  "devDependencies": {
+    "vercel": "^31.3.1"
+  }
+}
