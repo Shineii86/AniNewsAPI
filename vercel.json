@@ -4,16 +4,36 @@
     {
       "src": "api/**/*.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "index.js",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
-    { "src": "/api/news/tags", "dest": "api/news/tags.js" },
-    { "src": "/api/news/([^/]+)", "dest": "api/news/$1.js" },
-    { "src": "/api/news", "dest": "api/news.js" },
-    { "src": "/(.*)", "dest": "index.js" }
+    {
+      "src": "/api/news/tags",
+      "dest": "/api/news/tags.js"
+    },
+    {
+      "src": "/api/news/(?<slug>[^/]+)",
+      "dest": "/api/news/[slug].js?slug=$slug"
+    },
+    {
+      "src": "/api/news",
+      "dest": "/api/news.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/news.js",
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      }
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, s-maxage=600" }
+      ]
+    }
   ]
 }
