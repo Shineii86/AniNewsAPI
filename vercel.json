@@ -1,17 +1,15 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    { "src": "/api/news/tags", "dest": "api/news/tags.js" },
-    { "src": "/api/news/([^/]+)", "dest": "api/news/[slug].js" },
-    { "src": "/api/news", "dest": "api/news.js" }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/index.js" }
-  ]
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    { "src": "/api/news/tags", "dest": "api/news/tags.js" },
+    { "src": "/api/news/([^/]+)", "dest": "api/news/[slug].js" },
+    { "src": "/api/news", "dest": "api/news.js" },
+    { "src": "/(.*)", "dest": "/index.js" }
+  ]
 }
