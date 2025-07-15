@@ -119,22 +119,25 @@ npm run dev
 ## 📁 Folder Structure
 
 ```json
+# Main File Structure
 AniNewsAPI/
-├── data/                      ← 🔁 Smart cached JSON (e.g. news.json)
-├── pages/
-│   └── api/
-│       ├── news.js            ← 🔗 Main endpoint (/api/news)
-│       └── news/
-│           ├── tags.js        ← 🔗 Tags endpoint (/api/news/tags)
-│           └── [slug].js      ← 🔗 Slug endpoint (/api/news/:slug)
-├── utils/                     ← 🛠 Utility scrapers and cache handler
+├── data/
+│   └── news.json
+├── api/
+│   ├── news.js
+│   └── news/
+│       ├── tags.js
+│       └── [slug].js
+├── utils/
 │   ├── fetchCrunchyroll.js
 │   ├── fetchANN.js
-│   └── cacheNews.js
-├── vercel.json                ← ⚙️ Vercel routing config (✅ optimized below)
-├── package.json               ← 📦 Project dependencies and scripts
-└── README.md                  ← 📘 Full project docs
-
+│   ├── fetchAnimeCorner.js
+│   ├── generateSlug.js
+│   ├── cacheHandler.js
+│   └── contentParser.js
+├── vercel.json
+├── package.json
+└── README.md
 ```
 
 ---
