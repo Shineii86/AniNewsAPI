@@ -10,10 +10,15 @@ export default async function handler(req, res) {
       return res.status(200).json({
         success: false,
         message: "⚠️ No news found. Try again later.",
-        creator: "Shinei Nouzen",
-        github: "https://github.com/shineii86",
-        telegram: "https://telegram.me/shineii86",
         timestamp: new Date().toISOString(),
+        creator: "Shinei Nouzen",
+        github: "https://github.com/Shineii86",
+        telegram: "https://telegram.me/Shineii86",
+        message: "Build with ❤️ by Shinei Nouzen",
+        timestamp: new Date().toLocaleString("en-IN", {
+          timeZone: "Asia/Kolkata",
+          hour12: true
+      })
       });
     }
 
@@ -23,16 +28,29 @@ export default async function handler(req, res) {
       success: true,
       count: sorted.length,
       data: sorted,
-      creator: "Shinei Nouzen",
-      github: "https://github.com/shineii86",
-      telegram: "https://telegram.me/shineii86",
       timestamp: new Date().toISOString(),
+      creator: "Shinei Nouzen",
+      github: "https://github.com/Shineii86",
+      telegram: "https://telegram.me/Shineii86",
+      message: "Build with ❤️ by Shinei Nouzen",
+      timestamp: new Date().toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour12: true
+      })
     });
   } catch (err) {
     res.status(500).json({
       success: false,
       message: "❌ Failed to fetch news.",
       error: err.message,
+      creator: "Shinei Nouzen",
+      github: "https://github.com/Shineii86",
+      telegram: "https://telegram.me/Shineii86",
+      message: "Build with ❤️ by Shinei Nouzen",
+      timestamp: new Date().toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour12: true
+      })
     });
   }
 }
