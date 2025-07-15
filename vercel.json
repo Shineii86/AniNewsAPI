@@ -21,7 +21,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/api/news.js",
+      "dest": "/index.js",
       "headers": {
         "Cache-Control": "public, max-age=3600"
       }
