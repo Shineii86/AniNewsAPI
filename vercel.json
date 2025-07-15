@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    { "src": "/api/news/tags", "dest": "api/news/tags.js" },
+    { "src": "/api/news/([^/]+)", "dest": "api/news/[slug].js" },
+    { "src": "/api/news", "dest": "api/news/index.js" },
+    { "src": "/(.*)", "dest": "/" },
+    { "src": "/(.*)", "dest": "/index.js }
+  ]
+}
