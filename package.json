@@ -1,35 +1,21 @@
 {
   "name": "aninews",
   "version": "1.0.0",
-  "description": "🔎 Real-time Anime News API that scrapes live articles from Crunchyroll & ANN — supports smart caching, full article parsing, tags, and Vercel hosting.",
-  "main": "api/news.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "vercel dev",
-    "start": "vercel dev",
-    "test": "echo \"No tests yet\" && exit 0"
+    "dev": "node server.js",
+    "build": "echo 'Build complete'",
+    "start": "NODE_ENV=production node server.js"
   },
-  "keywords": [
-    "anime",
-    "news",
-    "api",
-    "crunchyroll",
-    "scraper",
-    "serverless",
-    "vercel",
-    "ann",
-    "otaku"
-  ],
-  "author": "Shinei Nouzen",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Shineii86/AniNewsAPI"
-  },
-  "license": "MIT",
   "dependencies": {
-    "axios": "^1.6.0",
-    "cheerio": "^1.0.0-rc.12"
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12",
+    "lru-cache": "^10.2.0",
+    "node-cache": "^5.1.2",
+    "puppeteer-core": "^22.7.1",
+    "@vercel/node": "^3.0.4"
   },
-  "devDependencies": {
-    "vercel": "^31.3.1"
+  "engines": {
+    "node": ">=18.x"
   }
 }
