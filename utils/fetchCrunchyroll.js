@@ -1,23 +1,41 @@
-// utils/fetchCrunchyroll.js
-import axios from "axios";
-import cheerio from "cheerio";
+const axios = require('axios');
+const cheerio = require('cheerio');
+const generateSlug = require('./generateSlug');
 
-export async function fetchCrunchyrollNews() {
-  const { data } = await axios.get("https://www.crunchyroll.com/news");
-  const $ = cheerio.load(data);
-  const articles = [];
-
-  $("a.cr-news-card").each((i, el) => {
-    const title = $(el).find(".card-title").text().trim();
-    const link = "https://www.crunchyroll.com" + $(el).attr("href");
-    const image = $(el).find("img").attr("src");
-    const slug = link.split("/").filter(Boolean).pop();
-    const date = $(el).find(".card-date").text().trim();
-
-    if (title && link) {
-      articles.push({ title, link, image, date, source: "Crunchyroll", slug });
-    }
-  });
-
-  return articles;
-}
+module.exports = async () => {
+  try {
+    const { data } = await axios.get('https://www.crunchyroll.com/news', {
+      headers: { 'Accept-Language': 'en-US' }
+    });
+    
+    const $ = cheerio.load(data);
+    const articles = [];
+    
+    $('.news-item').each((i, el) => {
+      const $el = $(el);
+      const title = $el.find('.news-item__title').text().trim();
+      const excerpt = $el.find('.news-item__desc').text().trim();
+      const date = $el.find('.news-item__date').attr('datetime');
+      const image = $el.find('.news-item__img img').attr('src') || '';
+      const link = `https://www.crunchyroll.com${$el.find('a').attr('href')}`;
+      
+      if (title && link) {
+        articles.push({
+          title,
+          slug: generateSlug(title, 'crunchyroll'),
+          source: 'Crunchyroll',
+          excerpt,
+          date,
+          image,
+          link,
+          tags: ['official']
+        });
+      }
+    });
+    
+    return articles.slice(0, 15);
+  } catch (error) {
+    console.error('Crunchyroll fetch error:', error);
+    return [];
+  }
+};
