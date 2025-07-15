@@ -2,6 +2,7 @@
   "name": "aninewsapi",
   "version": "1.0.0",
   "description": "🔎 Real-time Anime News API that scrapes live articles from Crunchyroll & ANN — supports smart caching, full article parsing, tags, and Vercel hosting.",
+  "main": "api/news.js",
   "scripts": {
     "dev": "vercel dev",
     "start": "vercel dev",
