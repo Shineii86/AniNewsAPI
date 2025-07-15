@@ -1,1 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AniNewsAPI | Real-time Anime Headlines</title>
+  <meta name="description" content="Live Anime News API scraping Crunchyroll & ANN, with smart caching, tag filtering & full-article support.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e1e2e;
+      --secondary: #313244;
+      --accent: #89b4fa;
+      --accent-hover: #74c7ec;
+      --light: #cdd6f4;
+      --dark: #11111b;
+      --highlight: #f5c2e7;
+      --success: #a6e3a1;
+      --warning: #f9e2af;
+      --error: #f38ba8;
+      --card-bg: rgba(49, 50, 68, 0.6);
+      --card-border: rgba(108, 112, 134, 0.3);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      --shadow-hover: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+      color: var(--light);
+      display: flex; 
+      flex-direction: column; 
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    .container { 
+      width:100%; 
+      max-width:1200px; 
+      margin:0 auto; 
+      padding:0 20px; 
+    }
 
+    /* Header */
+    header {
+      background: var(--primary);
+      padding: 1.2rem 0;
+      position: sticky; 
+      top:0; 
+      z-index:100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--card-border);
+    }
+    
+    .header-content { 
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center; 
+    }
+    
+    .logo { 
+      display:flex; 
+      align-items:center; 
+      gap:15px; 
+    }
+    
+    .logo-icon { 
+      font-size:2.2rem; 
+      color:var(--accent);
+    }
+    
+    .logo h1 { 
+      font-size:1.8rem; 
+      font-weight:700; 
+      background: linear-gradient(to right, var(--accent) 0%, var(--highlight) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    nav ul { 
+      display:flex; 
+      list-style:none; 
+      gap:2.5rem; 
+    }
+    
+    nav a {
+      color: var(--light); 
+      text-decoration:none; 
+      font-weight:500;
+      position:relative; 
+      padding:8px 0; 
+      transition: var(--transition);
+      opacity: 0.9;
+    }
+    
+    nav a:hover { 
+      color: var(--accent); 
+      opacity: 1;
+    }
+    
+    nav a::after {
+      content:''; 
+      position:absolute; 
+      bottom:0; 
+      left:0;
+      width:0; 
+      height:2px; 
+      background:var(--accent);
+      transition: var(--transition);
+    }
+    
+    nav a:hover::after { 
+      width:100%; 
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(rgba(17, 17, 27, 0.85), rgba(17, 17, 27, 0.85)), 
+                  url('https://images.unsplash.com/photo-1635189779577-555de33a4c4a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80') center/cover;
+      color: white; 
+      text-align: center; 
+      padding: 6rem 0 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--highlight));
+    }
+    
+    .hero h2 { 
+      font-size:3.2rem; 
+      line-height:1.2; 
+      margin-bottom:1.5rem; 
+      font-weight: 700;
+    }
+    
+    .hero p { 
+      font-size:1.3rem; 
+      opacity:.85; 
+      margin-bottom:2.5rem; 
+      max-width:800px; 
+      margin-left:auto; 
+      margin-right:auto; 
+    }
+    
+    .cta-button {
+      display:inline-block; 
+      background: linear-gradient(135deg, var(--accent) 0%, var(--highlight) 100%);
+      color: var(--dark);
+      padding:14px 36px; 
+      border-radius: var(--radius-sm); 
+      text-decoration: none; 
+      font-weight:600;
+      transition: var(--transition); 
+      box-shadow: 0 4px 20px rgba(137, 180, 250, 0.3);
+      border: none;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--accent-hover) 0%, #f5b0e0 100%);
+      z-index: -1;
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.3s ease;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-3px); 
+      box-shadow: 0 8px 25px rgba(137, 180, 250, 0.4);
+    }
+    
+    .cta-button:hover::after {
+      transform: scaleY(1);
+    }
+    
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 4rem;
+      flex-wrap: wrap;
+    }
+    
+    .stat-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 1.5rem 2rem;
+      border-radius: var(--radius-sm);
+      backdrop-filter: blur(10px);
+      min-width: 180px;
+      transition: var(--transition);
+    }
+    
+    .stat-item:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+    }
+    
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--accent) 0%, var(--highlight) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    /* Features */
+    .features { 
+      padding:6rem 0 5rem; 
+    }
+    
+    .section-title { 
+      text-align:center; 
+      margin-bottom:4rem; 
+    }
+    
+    .section-title h2 { 
+      font-size:2.6rem; 
+      color:var(--light); 
+      margin-bottom:1.2rem; 
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, var(--accent) 0%, var(--highlight) 100%);
+      border-radius: 2px;
+    }
+    
+    .section-title p { 
+      color:var(--light); 
+      opacity: 0.8;
+      max-width:650px; 
+      margin:0 auto; 
+      font-size: 1.2rem;
+    }
+    
+    .features-grid {
+      display:grid; 
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); 
+      gap:2.5rem;
+    }
+    
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius); 
+      padding:2.5rem 2rem;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .feature-icon { 
+      font-size:3rem; 
+      color:var(--accent); 
+      margin-bottom:1.8rem; 
+    }
+    
+    .feature-card h3 { 
+      font-size:1.5rem; 
+      margin-bottom:1.2rem; 
+      color:var(--light); 
+    }
+    
+    .feature-card p { 
+      color: var(--light);
+      opacity: 0.85;
+      flex-grow: 1;
+    }
+
+    /* Documentation */
+    .documentation { 
+      padding:6rem 0 5rem;
+      position: relative;
+    }
+    
+    .documentation::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top right, rgba(137, 180, 250, 0.08) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .endpoint {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius); 
+      padding:2.5rem 2rem; 
+      margin-bottom:2.5rem;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+    
+    .endpoint:hover {
+      border-color: var(--accent);
+    }
+    
+    .endpoint-header { 
+      display:flex; 
+      align-items:center; 
+      margin-bottom:1.5rem; 
+    }
+    
+    .method {
+      padding:8px 16px; 
+      border-radius:6px; 
+      font-weight:600; 
+      margin-right:1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+    
+    .get { 
+      background: rgba(66, 153, 225, 0.15); 
+      color: var(--accent);
+      border: 1px solid rgba(66, 153, 225, 0.3);
+    }
+    
+    .endpoint-url {
+      font-family: 'JetBrains Mono', monospace; 
+      background: rgba(30, 30, 46, 0.7); 
+      padding:14px 20px;
+      border-left:4px solid var(--accent); 
+      border-radius: var(--radius-sm);
+      overflow-x:auto; 
+      margin:1.5rem 0;
+      color: var(--light);
+      font-size: 1.1rem;
+      border: 1px solid var(--card-border);
+    }
+    
+    .code-block {
+      background: #1a1a2e; 
+      color: var(--light); 
+      padding:1.8rem; 
+      border-radius: var(--radius-sm);
+      font-family: 'JetBrains Mono', monospace; 
+      font-size:0.95rem; 
+      overflow-x:auto;
+      border: 1px solid var(--card-border);
+      line-height: 1.7;
+    }
+    
+    .code-block .key { color: #89b4fa; }
+    .code-block .value { color: #a6e3a1; }
+    .code-block .string { color: #f9e2af; }
+    .code-block .comment { color: #6c7086; }
+
+    /* GitHub */
+    .github-section { 
+      padding:5rem 0; 
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+    }
+    
+    .github-content {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--primary); 
+      color: var(--light); 
+      padding:4rem 0 2rem; 
+      margin-top: auto;
+      border-top: 1px solid var(--card-border);
+    }
+    
+    .footer-content {
+      display:grid; 
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); 
+      gap:3rem;
+      margin-bottom:3rem;
+    }
+    
+    .footer-logo { 
+      display:flex; 
+      align-items:center; 
+      gap:15px; 
+      margin-bottom:1.5rem; 
+    }
+    
+    .footer-logo .logo-icon { 
+      font-size:2rem; 
+      color:var(--accent); 
+    }
+    
+    .footer-logo h3 { 
+      font-size:1.8rem; 
+      font-weight:700; 
+      background: linear-gradient(to right, var(--accent) 0%, var(--highlight) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .footer-about p {
+      opacity: 0.8;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--secondary);
+      color: var(--light);
+      transition: var(--transition);
+    }
+    
+    .social-links a:hover {
+      background: var(--accent);
+      color: var(--dark);
+      transform: translateY(-3px);
+    }
+    
+    .footer-links h4 {
+      font-size:1.3rem; 
+      margin-bottom:1.5rem; 
+      position: relative; 
+      padding-bottom:10px;
+    }
+    
+    .footer-links h4::after {
+      content:''; 
+      position:absolute; 
+      bottom:0; 
+      left:0; 
+      width:40px; 
+      height:3px; 
+      background:var(--accent);
+      border-radius: 2px;
+    }
+    
+    .footer-links ul { 
+      list-style:none; 
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-links a {
+      color: var(--light); 
+      text-decoration:none; 
+      opacity:.8;
+      transition: var(--transition); 
+      display:inline-block;
+      position: relative;
+    }
+    
+    .footer-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: var(--transition);
+    }
+    
+    .footer-links a:hover { 
+      opacity:1; 
+      color: var(--accent); 
+    }
+    
+    .footer-links a:hover::after {
+      width: 100%;
+    }
+    
+    .copyright {
+      text-align:center; 
+      font-size:0.95rem; 
+      opacity:.7;
+      padding-top: 2rem;
+      border-top: 1px solid var(--card-border);
+      margin-top: 2rem;
+    }
+
+    @media (max-width:768px) {
+      .header-content { 
+        flex-direction:column; 
+        gap:1.5rem; 
+      }
+      
+      nav ul { 
+        gap:1.5rem; 
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .hero h2 { 
+        font-size:2.5rem; 
+      }
+      
+      .hero p {
+        font-size: 1.1rem;
+      }
+      
+      .stats {
+        gap: 1.5rem;
+      }
+      
+      .stat-item {
+        padding: 1.2rem 1.5rem;
+        min-width: 140px;
+      }
+      
+      .stat-value {
+        font-size: 2rem;
+      }
+      
+      .features-grid {
+        gap: 1.8rem;
+      }
+      
+      .footer-content {
+        gap: 2.5rem;
+      }
+    }
+    
+    @media (max-width:480px) {
+      .hero h2 {
+        font-size: 2rem;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+      
+      .stats {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .stat-item {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <i class="logo-icon fas fa-newspaper"></i>
+        <h1>AniNewsAPI</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#documentation">Documentation</a></li>
+          <li><a href="#github">GitHub</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h2>Real-time Anime News</h2>
+      <p>Fetch live headlines from Crunchyroll & ANN with smart caching, tag filters, and full-article support. Built for developers who demand reliability.</p>
+      <a href="#documentation" class="cta-button">Explore Documentation</a>
+      
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value">10ms</div>
+          <div class="stat-label">Avg. Response Time</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">99.9%</div>
+          <div class="stat-label">Uptime</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">2</div>
+          <div class="stat-label">Sources</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">∞</div>
+          <div class="stat-label">Scalability</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Engineered for Developers</h2>
+        <p>Build faster with our powerful, feature-rich API designed for modern applications</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+          <h3>Live Scraping</h3>
+          <p>Always access the freshest news with on-demand scraping that bypasses stale data limitations.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-database"></i></div>
+          <h3>Smart Caching</h3>
+          <p>Optional JSON caching updated every 10 minutes for optimal performance and reliability.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-tags"></i></div>
+          <h3>Tag Filtering</h3>
+          <p>Precision filtering with query parameters: <code>?tag=games</code>, <code>?tag=anime</code>.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+          <h3>Article Slug</h3>
+          <p>Retrieve complete content via <code>/api/news/your-article-slug</code> endpoint.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-globe"></i></div>
+          <h3>Multi-Source</h3>
+          <p>Combine Crunchyroll & ANN or use individually with <code>?source=all</code> parameter.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-cloud"></i></div>
+          <h3>Serverless</h3>
+          <p>Deploy instantly as a Vercel Function with zero backend maintenance required.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Documentation -->
+  <section id="documentation" class="documentation">
+    <div class="container">
+      <div class="section-title">
+        <h2>API Documentation</h2>
+        <p>Simple endpoints with powerful parameters for all your integration needs</p>
+      </div>
+
+      <!-- /api/news -->
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method get">GET</span>
+          <h3>/api/news</h3>
+        </div>
+        <p>Fetch latest anime news with customizable parameters including limit, sort order, and source selection.</p>
+        <div class="endpoint-url">https://https://aninews.vercel.app/api/news?limit=5&sort=oldest&source=crunchyroll</div>
+        <div class="code-block">
+<code>{
+  <span class="key">"success"</span>: <span class="value">true</span>,
+  <span class="key">"count"</span>: <span class="value">5</span>,
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"id"</span>: <span class="string">"6501a3b8c8e42"</span>,
+      <span class="key">"title"</span>: <span class="string">"Demon Slayer Movie Breaks Records"</span>,
+      <span class="key">"excerpt"</span>: <span class="string">"The latest Demon Slayer movie has shattered box office records..."</span>,
+      <span class="key">"source"</span>: <span class="string">"Crunchyroll"</span>,
+      <span class="key">"date"</span>: <span class="string">"2025-07-12T14:30:00Z"</span>,
+      <span class="key">"tags"</span>: [<span class="string">"anime"</span>, <span class="string">"movies"</span>],
+      <span class="key">"image"</span>: <span class="string">"https://..."</span>,
+      <span class="key">"slug"</span>: <span class="string">"demon-slayer-movie-records"</span>
+    },
+    <span class="comment">// ...4 more items</span>
+  ],
+  <span class="key">"creator"</span>: <span class="string">"Shinei Nouzen"</span>,
+  <span class="key">"timestamp"</span>: <span class="string">"2025-07-15T11:30:00.000Z"</span>
+}</code>
+        </div>
+      </div>
+
+      <!-- /api/news/tags -->
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method get">GET</span>
+          <h3>/api/news/tags</h3>
+        </div>
+        <p>Filter Crunchyroll news articles by specific tags for targeted content retrieval.</p>
+        <div class="endpoint-url">https://https://aninews.vercel.app/api/news/tags?tag=games&limit=3</div>
+        <div class="code-block">
+<code>{
+  <span class="key">"success"</span>: <span class="value">true</span>,
+  <span class="key">"tag"</span>: <span class="string">"games"</span>,
+  <span class="key">"count"</span>: <span class="value">3</span>,
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"id"</span>: <span class="string">"6501a3c1d5f73"</span>,
+      <span class="key">"title"</span>: <span class="string">"New Genshin Impact Anime Collaboration"</span>,
+      <span class="key">"excerpt"</span>: <span class="string">"HoYoverse announces surprise collaboration with popular anime series..."</span>,
+      <span class="key">"source"</span>: <span class="string">"Crunchyroll"</span>,
+      <span class="key">"date"</span>: <span class="string">"2025-07-10T09:15:00Z"</span>,
+      <span class="key">"tags"</span>: [<span class="string">"games"</span>, <span class="string">"collab"</span>],
+      <span class="key">"image"</span>: <span class="string">"https://..."</span>,
+      <span class="key">"slug"</span>: <span class="string">"genshin-impact-anime-collab"</span>
+    },
+    <span class="comment">// ...2 more items</span>
+  ]
+}</code>
+        </div>
+      </div>
+
+      <!-- /api/news/:slug -->
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method get">GET</span>
+          <h3>/api/news/:slug</h3>
+        </div>
+        <p>Retrieve complete article content including full text and media using the article's unique slug.</p>
+        <div class="endpoint-url">https://https://aninews.vercel.app/api/news/demon-slayer-season-4-announced</div>
+        <div class="code-block">
+<code>{
+  <span class="key">"success"</span>: <span class="value">true</span>,
+  <span class="key">"slug"</span>: <span class="string">"demon-slayer-season-4-announced"</span>,
+  <span class="key">"title"</span>: <span class="string">"Demon Slayer Season 4 Announced for 2026 Release"</span>,
+  <span class="key">"source"</span>: <span class="string">"Anime News Network"</span>,
+  <span class="key">"date"</span>: <span class="string">"2025-07-14T16:45:00Z"</span>,
+  <span class="key">"image"</span>: <span class="string">"https://..."</span>,
+  <span class="key">"author"</span>: <span class="string">"Rebecca Silverman"</span>,
+  <span class="key">"content"</span>: [
+    <span class="string">"Ufotable announced today that Demon Slayer: Kimetsu no Yaiba will return for a fourth season..."</span>,
+    <span class="string">"The new season will adapt the Hashira Training arc from Koyoharu Gotouge's original manga..."</span>,
+    <span class="comment">// ...multiple paragraphs</span>
+  ],
+  <span class="key">"tags"</span>: [<span class="string">"anime"</span>, <span class="string">"shonen"</span>, <span class="string">"tv"</span>]
+}</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GitHub -->
+  <section id="github" class="github-section">
+    <div class="container">
+      <div class="github-content">
+        <div class="section-title">
+          <h2>Open Source & Community Driven</h2>
+          <p>Join our growing community of developers contributing to the future of AniNewsAPIs</p>
+        </div>
+        <a href="https://github.com/Shineii86/AniNewsAPI" target="_blank" class="cta-button">
+          <i class="fab fa-github"></i> View on GitHub
+        </a>
+        <p style="margin-top: 2rem; opacity: 0.8;">300+ stars • 45 contributors • MIT Licensed</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-about">
+          <div class="footer-logo">
+            <i class="logo-icon fas fa-fire"></i>
+            <h3>AniNewsAPI</h3>
+          </div>
+          <p>A high-performance, real-time Anime News API with smart caching. Built for developers who demand reliability and speed.</p>
+          <div class="social-links">
+            <a href="https://github.com/shineii86" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://x.com/shineii86" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://telegram.me/shineii86" target="_blank"><i class="fab fa-telegram"></i></a>
+            </div>
+        </div>
+        <div class="footer-links">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#documentation">API Documentation</a></li>
+            <li><a href="#github">GitHub Repository</a></li>
+            </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="https://github.com/AniPulse/ToS">Terms of Service</a></li>
+            <li><a href="https://github.com/AniPulse/Privacy">Privacy Policy</a></li>
+            </ul>
+        </div>
+      </div>
+      <div class="copyright">
+       Copyright © 2025 Shinei Nouzen • Licensed under MIT
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
