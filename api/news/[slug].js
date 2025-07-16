@@ -1,5 +1,5 @@
-const cacheHandler = require('../../../utils/cacheHandler');
-const contentParser = require('../../../utils/contentParser');
+const cacheHandler = require('../../utils/cacheHandler');
+const contentParser = require('../../utils/contentParser');
 
 module.exports = async (req, res) => {
   const { slug } = req.query;
