@@ -16,8 +16,8 @@
       "destination": "/api/news/tags.js"
     },
     {
-      "source": "/api/news/(?<slug>[^/]+)",
-      "destination": "/api/news/[slug].js?slug=$slug"
+      "source": "/api/news/([^/]+)",
+      "destination": "/api/news/[slug].js?slug=$1"
     },
     {
       "source": "/api/news",
