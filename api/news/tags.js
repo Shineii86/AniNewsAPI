@@ -2,25 +2,37 @@ const cacheHandler = require('../../utils/cacheHandler');
 
 module.exports = async (req, res) => {
   try {
-    const cachedTags = cacheHandler.get('tags');
-    if (cachedTags) {
-      return res.json(cachedTags);
+    const { tag } = req.query;
+    
+    if (!tag) {
+      return res.status(400).json({ error: 'Missing tag parameter' });
     }
     
     const cachedNews = cacheHandler.get('news') || [];
-    const tags = new Set();
+    const normalizedTag = tag.toLowerCase();
     
-    cachedNews.forEach(article => {
-      article.tags.forEach(tag => tags.add(tag.toLowerCase()));
-    });
+    // Filter articles by tag
+    const filteredArticles = cachedNews.filter(article => 
+      article.tags.some(t => t.toLowerCase() === normalizedTag)
+    );
     
-    const tagList = Array.from(tags).sort();
-    cacheHandler.set('tags', tagList);
+    // For Crunchyroll-only filtering as specified
+    const crunchyrollArticles = filteredArticles.filter(
+      article => article.source.toLowerCase() === 'crunchyroll'
+    );
     
-    res.setHeader('Cache-Control', 'public, max-age=86400');
-    res.json(tagList);
+    if (crunchyrollArticles.length === 0) {
+      return res.status(404).json({
+        error: 'No Crunchyroll articles found for this tag',
+        suggestion: 'Try /api/news/tags for available tags'
+      });
+    }
+    
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'public, max-age=600');
+    res.json(crunchyrollArticles);
   } catch (error) {
-    console.error('Tags error:', error);
-    res.status(500).json({ error: 'Failed to fetch tags' });
+    console.error('Tag filter error:', error);
+    res.status(500).json({ error: 'Failed to filter by tag' });
   }
 };
