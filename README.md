@@ -26,13 +26,13 @@
 
 ---
 
-## 📡 API Endpoints
+## 📡 API Endpoints 
 
-### `GET /api/news`
+### `GET /api/news` (Stable)
 
 Returns the latest anime news articles.
 
-#### Query Parameters:
+#### (Unstable) <s>Query Parameters:
 
 | Param     | Type     | Default     | Description                                  |
 |-----------|----------|-------------|----------------------------------------------|
@@ -68,6 +68,7 @@ Returns full article content for a specific Crunchyroll news post.
 ```http
 GET /api/news/demon-slayer-kimetsu-no-yaiba-season-3-announced
 ```
+</s>
 
 ---
 
