@@ -4,24 +4,28 @@
     {
       "src": "api/**/*.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/news/tags",
-      "dest": "/api/news/tags.js"
+      "source": "/api/news/tags",
+      "destination": "/api/news/tags.js"
     },
     {
-      "src": "/api/news/(?<slug>[^/]+)",
-      "dest": "/api/news/[slug].js?slug=$slug"
+      "source": "/api/news/(?<slug>[^/]+)",
+      "destination": "/api/news/[slug].js?slug=$slug"
     },
     {
-      "src": "/api/news",
-      "dest": "/api/news.js"
+      "source": "/api/news",
+      "destination": "/api/news.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.js"
+      "source": "/(.*)",
+      "destination": "/index.js"
     }
   ],
   "headers": [
@@ -30,6 +34,13 @@
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
         { "key": "Cache-Control", "value": "public, s-maxage=600" }
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
       ]
     }
   ]
