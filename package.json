@@ -8,13 +8,12 @@
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
-    "axios": "^1.7.2",
-    "cheerio": "^1.0.0-rc.12",
-    "lru-cache": "^10.2.0",
-    "node-cache": "^5.1.2",
-    "puppeteer-core": "^22.7.1",
-    "@vercel/node": "^3.0.4"
-  },
+  "axios": "^1.7.2",
+  "cheerio": "^1.0.0-rc.12",
+  "node-cache": "^5.1.2",
+  "puppeteer-core": "^22.7.1",
+  "@vercel/node": "^3.0.4"
+}, 
   "engines": {
     "node": ">=18.x"
   }
