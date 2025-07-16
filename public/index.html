@@ -645,7 +645,7 @@
           <div class="stat-label">Uptime</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">2</div>
+          <div class="stat-value">3</div>
           <div class="stat-label">Sources</div>
         </div>
         <div class="stat-item">
@@ -713,28 +713,7 @@
           <h3>/api/news</h3>
         </div>
         <p>Fetch latest anime news with customizable parameters including limit, sort order, and source selection.</p>
-        <div class="endpoint-url">https://https://aninews.vercel.app/api/news?limit=5&sort=oldest&source=crunchyroll</div>
-        <div class="code-block">
-<code>{
-  <span class="key">"success"</span>: <span class="value">true</span>,
-  <span class="key">"count"</span>: <span class="value">5</span>,
-  <span class="key">"data"</span>: [
-    {
-      <span class="key">"id"</span>: <span class="string">"6501a3b8c8e42"</span>,
-      <span class="key">"title"</span>: <span class="string">"Demon Slayer Movie Breaks Records"</span>,
-      <span class="key">"excerpt"</span>: <span class="string">"The latest Demon Slayer movie has shattered box office records..."</span>,
-      <span class="key">"source"</span>: <span class="string">"Crunchyroll"</span>,
-      <span class="key">"date"</span>: <span class="string">"2025-07-12T14:30:00Z"</span>,
-      <span class="key">"tags"</span>: [<span class="string">"anime"</span>, <span class="string">"movies"</span>],
-      <span class="key">"image"</span>: <span class="string">"https://..."</span>,
-      <span class="key">"slug"</span>: <span class="string">"demon-slayer-movie-records"</span>
-    },
-    <span class="comment">// ...4 more items</span>
-  ],
-  <span class="key">"creator"</span>: <span class="string">"Shinei Nouzen"</span>,
-  <span class="key">"timestamp"</span>: <span class="string">"2025-07-15T11:30:00.000Z"</span>
-}</code>
-        </div>
+        <div class="endpoint-url">https://https://aninews.vercel.app/api/news</div>
       </div>
 
       <!-- /api/news/tags -->
@@ -744,27 +723,7 @@
           <h3>/api/news/tags</h3>
         </div>
         <p>Filter Crunchyroll news articles by specific tags for targeted content retrieval.</p>
-        <div class="endpoint-url">https://https://aninews.vercel.app/api/news/tags?tag=games&limit=3</div>
-        <div class="code-block">
-<code>{
-  <span class="key">"success"</span>: <span class="value">true</span>,
-  <span class="key">"tag"</span>: <span class="string">"games"</span>,
-  <span class="key">"count"</span>: <span class="value">3</span>,
-  <span class="key">"data"</span>: [
-    {
-      <span class="key">"id"</span>: <span class="string">"6501a3c1d5f73"</span>,
-      <span class="key">"title"</span>: <span class="string">"New Genshin Impact Anime Collaboration"</span>,
-      <span class="key">"excerpt"</span>: <span class="string">"HoYoverse announces surprise collaboration with popular anime series..."</span>,
-      <span class="key">"source"</span>: <span class="string">"Crunchyroll"</span>,
-      <span class="key">"date"</span>: <span class="string">"2025-07-10T09:15:00Z"</span>,
-      <span class="key">"tags"</span>: [<span class="string">"games"</span>, <span class="string">"collab"</span>],
-      <span class="key">"image"</span>: <span class="string">"https://..."</span>,
-      <span class="key">"slug"</span>: <span class="string">"genshin-impact-anime-collab"</span>
-    },
-    <span class="comment">// ...2 more items</span>
-  ]
-}</code>
-        </div>
+        <div class="endpoint-url">https://https://aninews.vercel.app/api/news/tags?tag=news</div>
       </div>
 
       <!-- /api/news/:slug -->
@@ -775,23 +734,6 @@
         </div>
         <p>Retrieve complete article content including full text and media using the article's unique slug.</p>
         <div class="endpoint-url">https://https://aninews.vercel.app/api/news/demon-slayer-season-4-announced</div>
-        <div class="code-block">
-<code>{
-  <span class="key">"success"</span>: <span class="value">true</span>,
-  <span class="key">"slug"</span>: <span class="string">"demon-slayer-season-4-announced"</span>,
-  <span class="key">"title"</span>: <span class="string">"Demon Slayer Season 4 Announced for 2026 Release"</span>,
-  <span class="key">"source"</span>: <span class="string">"Anime News Network"</span>,
-  <span class="key">"date"</span>: <span class="string">"2025-07-14T16:45:00Z"</span>,
-  <span class="key">"image"</span>: <span class="string">"https://..."</span>,
-  <span class="key">"author"</span>: <span class="string">"Rebecca Silverman"</span>,
-  <span class="key">"content"</span>: [
-    <span class="string">"Ufotable announced today that Demon Slayer: Kimetsu no Yaiba will return for a fourth season..."</span>,
-    <span class="string">"The new season will adapt the Hashira Training arc from Koyoharu Gotouge's original manga..."</span>,
-    <span class="comment">// ...multiple paragraphs</span>
-  ],
-  <span class="key">"tags"</span>: [<span class="string">"anime"</span>, <span class="string">"shonen"</span>, <span class="string">"tv"</span>]
-}</code>
-        </div>
       </div>
     </div>
   </section>
@@ -844,10 +786,9 @@
         </div>
       </div>
       <div class="copyright">
-       Copyright © 2025 Shinei Nouzen • Licensed under MIT
+       Copyright © 2025 Shinei Nouzen All Rights Reserved
       </div>
     </div>
   </footer>
-
 </body>
 </html>
