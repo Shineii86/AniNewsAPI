@@ -1,4 +1,4 @@
-const cacheHandler = require('../../../utils/cacheHandler');
+const cacheHandler = require('../../utils/cacheHandler');
 
 module.exports = async (req, res) => {
   try {
