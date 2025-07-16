@@ -5,7 +5,10 @@ const generateSlug = require('./generateSlug');
 module.exports = async () => {
   try {
     const { data } = await axios.get('https://www.animenewsnetwork.com/news/', {
-      headers: { 'User-Agent': 'AniNewsAPI/1.0' }
+      headers: { 
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+      },
+      timeout: 10000
     });
     
     const $ = cheerio.load(data);
@@ -21,7 +24,7 @@ module.exports = async () => {
       const tags = [];
       
       $el.find('.byline .tags a').each((i, tag) => {
-        tags.push($(tag).text().trim());
+        tags.push($(tag).text().trim().toLowerCase());
       });
       
       if (title && link) {
@@ -33,14 +36,14 @@ module.exports = async () => {
           date,
           image: image.startsWith('//') ? `https:${image}` : image,
           link: `https://www.animenewsnetwork.com${link}`,
-          tags
+          tags: tags.length > 0 ? tags : ['news']
         });
       }
     });
     
     return articles.slice(0, 15);
   } catch (error) {
-    console.error('ANN fetch error:', error);
+    console.error('ANN fetch error:', error.message);
     return [];
   }
 };
