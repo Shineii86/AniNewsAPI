@@ -28,11 +28,11 @@
 
 ## 📡 API Endpoints 
 
-### `GET /api/news` (Stable)
+### `GET /api/news` <sup>`(↑Stable)`</sup>
 
 Returns the latest anime news articles.
 
-#### (Unstable) <s>Query Parameters:
+#### Query Parameters: <sup>`(↓Unstable)`</sup>
 
 | Param     | Type     | Default     | Description                                  |
 |-----------|----------|-------------|----------------------------------------------|
@@ -47,7 +47,7 @@ GET /api/news?source=crunchyroll&limit=5&sort=oldest
 
 ---
 
-### `GET /api/news/tags?tag=`
+### `GET /api/news/tags?tag=` <sup>`(↓Unstable)`</sup>
 
 Filters Crunchyroll news by tag (e.g. `anime`, `games`, `manga`).
 
@@ -59,7 +59,7 @@ GET /api/news/tags?tag=games
 
 ---
 
-### `GET /api/news/:slug`
+### `GET /api/news/:slug` <sup>`(↓Unstable)`</sup>
 
 Returns full article content for a specific Crunchyroll news post.
 
