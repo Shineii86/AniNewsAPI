@@ -4,6 +4,10 @@ const contentParser = require('../../utils/contentParser');
 module.exports = async (req, res) => {
   const { slug } = req.query;
   
+  if (!slug) {
+    return res.status(400).json({ error: 'Missing slug parameter' });
+  }
+  
   try {
     const cachedNews = cacheHandler.get('news') || [];
     const article = cachedNews.find(a => a.slug === slug);
@@ -25,10 +29,11 @@ module.exports = async (req, res) => {
     // Cache article content for 1 hour
     cacheHandler.set(`article-${slug}`, fullArticle, 3600);
     
+    res.setHeader('Content-Type', 'application/json');
     res.setHeader('Cache-Control', 'public, max-age=3600');
     res.json(fullArticle);
   } catch (error) {
     console.error('Article fetch error:', error);
-    res.status(500).json({ error: 'Failed to fetch article' });
+    res.status(500).json({ error: 'Failed to fetch article content' });
   }
 };
