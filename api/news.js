@@ -3,64 +3,74 @@ const fetchCrunchyroll = require('../utils/fetchCrunchyroll');
 const fetchANN = require('../utils/fetchANN');
 const fetchAnimeCorner = require('../utils/fetchAnimeCorner');
 
-// Add a new source for fallback
 module.exports = async (req, res) => {
   try {
+    // Parse query parameters
+    const limit = parseInt(req.query.limit) || 10;
+    const sort = req.query.sort || 'latest';
+    const source = req.query.source || 'all';
+    
+    // Get cached news
     const cachedNews = cacheHandler.get('news');
     if (cachedNews) {
-      res.setHeader('X-Cache-Status', 'HIT');
-      return res.json(cachedNews);
+      return sendFilteredResponse(res, cachedNews, source, sort, limit);
     }
     
-    // Fetch from multiple sources
+    // Fetch from sources concurrently
     const sources = [
-      fetchANN(),
-      fetchCrunchyroll(),
-      fetchAnimeCorner() // Add this new source
+      source === 'all' || source === 'crunchyroll' ? fetchCrunchyroll() : Promise.resolve([]),
+      source === 'all' || source === 'ann' ? fetchANN() : Promise.resolve([]),
+      source === 'all' || source === 'animecorner' ? fetchAnimeCorner() : Promise.resolve([])
     ];
     
     const results = await Promise.allSettled(sources);
     
     let allNews = [];
-    results.forEach((result, index) => {
+    results.forEach(result => {
       if (result.status === 'fulfilled') {
         allNews = allNews.concat(result.value);
-      } else {
-        console.error(`Source ${index} failed:`, result.reason);
       }
     });
-    
-    // Fallback to ANN only if everything fails
-    if (allNews.length === 0) {
-      console.error('All sources failed, using ANN fallback');
-      const annFallback = await fetchANN();
-      allNews = annFallback;
-    }
     
     // Sort by date
     allNews.sort((a, b) => new Date(b.date) - new Date(a.date));
     
-    // Cache with shorter TTL on failure
-    const cacheTTL = allNews.length > 10 ? 600 : 60; // 10 min or 1 min
-    cacheHandler.set('news', allNews, cacheTTL);
+    // Add source-based tags
+    allNews = allNews.map(article => ({
+      ...article,
+      tags: [...article.tags, article.source.toLowerCase().replace(/\s+/g, '-')]
+    }));
     
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Cache-Control', `public, max-age=${cacheTTL}`);
-    res.setHeader('X-Cache-Status', 'MISS');
-    res.json(allNews);
+    // Update cache
+    cacheHandler.set('news', allNews);
+    
+    sendFilteredResponse(res, allNews, source, sort, limit);
   } catch (error) {
     console.error('API error:', error);
-    
-    // Try to return cached data even on error
-    const cachedNews = cacheHandler.get('news');
-    if (cachedNews) {
-      res.setHeader('X-Cache-Status', 'STALE');
-      return res.json(cachedNews);
-    }
-    
-    res.status(500).json({ 
-      error: 'Failed to fetch news',
-      message: error.message
-    });
+    res.status(500).json({ error: 'Failed to fetch news' });
   }
 };
+
+function sendFilteredResponse(res, news, source, sort, limit) {
+  // Filter by source
+  let filteredNews = news;
+  if (source !== 'all') {
+    filteredNews = filteredNews.filter(
+      article => article.source.toLowerCase() === source.toLowerCase()
+    );
+  }
+  
+  // Sort results
+  if (sort === 'oldest') {
+    filteredNews.sort((a, b) => new Date(a.date) - new Date(b.date));
+  } else { // Default: latest first
+    filteredNews.sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
+  
+  // Apply limit
+  filteredNews = filteredNews.slice(0, limit);
+  
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Cache-Control', 'public, max-age=600');
+  res.json(filteredNews);
+}
