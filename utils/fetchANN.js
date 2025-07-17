@@ -18,24 +18,36 @@ module.exports = async () => {
       const $el = $(el);
       const title = $el.find('h3 a').text().trim();
       const excerpt = $el.find('.preview').text().trim();
-      const date = $el.find('.byline time').attr('datetime');
+      const dateAttr = $el.find('.byline time').attr('datetime');
       const image = $el.find('img').attr('src') || '';
       const link = $el.find('h3 a').attr('href');
       const tags = [];
       
+      // Extract tags from byline
       $el.find('.byline .tags a').each((i, tag) => {
-        tags.push($(tag).text().trim().toLowerCase());
+        const tagText = $(tag).text().trim().toLowerCase();
+        if (tagText) {
+          tags.push(tagText);
+        }
       });
       
       if (title && link) {
+        // Parse date
+        let date;
+        if (dateAttr) {
+          date = new Date(dateAttr).toISOString();
+        } else {
+          date = new Date().toISOString();
+        }
+
         articles.push({
           title,
           slug: generateSlug(title, 'ann'),
           source: 'Anime News Network',
-          excerpt,
+          excerpt: excerpt || `${title.slice(0, 100)}...`,
           date,
           image: image.startsWith('//') ? `https:${image}` : image,
-          link: `https://www.animenewsnetwork.com${link}`,
+          link: link.startsWith('http') ? link : `https://www.animenewsnetwork.com${link}`,
           tags: tags.length > 0 ? tags : ['news']
         });
       }

@@ -16,20 +16,31 @@ module.exports = async () => {
 
     $('article').each((i, el) => {
       const $el = $(el);
-      const title = $el.find('h2.entry-title').text().trim();
+      const title = $el.find('h2.entry-title a').text().trim();
       const excerpt = $el.find('.entry-excerpt').text().trim();
-      const date = $el.find('.entry-date').attr('datetime');
-      const image = $el.find('.entry-thumb img').attr('src');
+      const dateText = $el.find('.entry-date').text().trim();
+      const dateAttr = $el.find('.entry-date').attr('datetime');
+      const image = $el.find('.entry-thumb img').attr('src') || $el.find('.entry-thumb img').attr('data-src');
       const link = $el.find('h2.entry-title a').attr('href');
 
       if (title && link) {
+        // Parse date - try datetime attribute first, then text
+        let date;
+        if (dateAttr) {
+          date = new Date(dateAttr).toISOString();
+        } else if (dateText) {
+          date = new Date(dateText).toISOString();
+        } else {
+          date = new Date().toISOString();
+        }
+
         articles.push({
           title,
           slug: generateSlug(title, 'animecorner'),
           source: 'Anime Corner',
-          excerpt,
+          excerpt: excerpt || `${title.slice(0, 100)}...`,
           date,
-          image,
+          image: image || '',
           link,
           tags: ['community', 'news']
         });
