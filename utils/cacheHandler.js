@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const CACHE_TTL = 60 * 15; // 15 minutes default
-const CACHE_FILE = path.join(__dirname, '../data/news.json');
+const CACHE_DIR = path.join(__dirname, '../data');
 
 const cache = new NodeCache({ 
   stdTTL: CACHE_TTL, 
@@ -12,8 +12,8 @@ const cache = new NodeCache({
 });
 
 // Create data directory if not exists
-if (!fs.existsSync(path.dirname(CACHE_FILE))) {
-  fs.mkdirSync(path.dirname(CACHE_FILE), { recursive: true });
+if (!fs.existsSync(CACHE_DIR)) {
+  fs.mkdirSync(CACHE_DIR, { recursive: true });
 }
 
 module.exports = {
@@ -23,9 +23,10 @@ module.exports = {
       const memCache = cache.get(key);
       if (memCache) return memCache;
       
-      // Fallback to disk cache
-      if (fs.existsSync(CACHE_FILE)) {
-        const fileData = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+      // Fallback to disk cache with key-specific file
+      const cacheFile = path.join(CACHE_DIR, `${key}.json`);
+      if (fs.existsSync(cacheFile)) {
+        const fileData = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
         cache.set(key, fileData);
         return fileData;
       }
@@ -38,8 +39,9 @@ module.exports = {
   set: (key, data, ttl = CACHE_TTL) => {
     try {
       cache.set(key, data, ttl);
-      // Persist to disk
-      fs.writeFileSync(CACHE_FILE, JSON.stringify(data));
+      // Persist to disk with key-specific file
+      const cacheFile = path.join(CACHE_DIR, `${key}.json`);
+      fs.writeFileSync(cacheFile, JSON.stringify(data));
     } catch (e) {
       console.error('Cache write error:', e);
     }
@@ -48,8 +50,9 @@ module.exports = {
   del: (key) => {
     cache.del(key);
     try {
-      if (fs.existsSync(CACHE_FILE)) {
-        fs.unlinkSync(CACHE_FILE);
+      const cacheFile = path.join(CACHE_DIR, `${key}.json`);
+      if (fs.existsSync(cacheFile)) {
+        fs.unlinkSync(cacheFile);
       }
     } catch (e) {
       console.error('Cache delete error:', e);
