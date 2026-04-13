@@ -12,6 +12,18 @@
   ],
   "rewrites": [
     {
+      "source": "/api/health",
+      "destination": "/api/health.js"
+    },
+    {
+      "source": "/api/stats",
+      "destination": "/api/stats.js"
+    },
+    {
+      "source": "/api/cache/clear",
+      "destination": "/api/cache/clear.js"
+    },
+    {
       "source": "/api/news/tags",
       "destination": "/api/news/tags.js"
     },
@@ -33,7 +45,9 @@
       "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Cache-Control", "value": "public, s-maxage=600" }
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" },
+        { "key": "Cache-Control", "value": "public, s-maxage=300" }
       ]
     },
     {
@@ -43,5 +57,8 @@
         { "key": "Cache-Control", "value": "public, max-age=3600" }
       ]
     }
-  ]
+  ],
+  "env": {
+    "CACHE_TTL": "600"
+  }
 }
