@@ -6,17 +6,17 @@ const dateParser = require('./dateParser');
 const RSSParser = require('rss-parser');
 const rssParser = new RSSParser();
 
-const AC_URL = 'https://animecorner.me/';
-const AC_RSS = 'https://animecorner.me/feed/';
+const AH_URL = 'https://www.animeherald.com/';
+const AH_RSS = 'https://www.animeherald.com/feed/';
 
 /**
- * Fetch news from Anime Corner website
+ * Fetch news from Anime Herald website
  */
 async function fetchFromWeb() {
   try {
-    console.log('[AnimeCorner] Fetching from web...');
+    console.log('[AnimeHerald] Fetching from web...');
     
-    const { data } = await axios.get(AC_URL, {
+    const { data } = await axios.get(AH_URL, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -31,24 +31,23 @@ async function fetchFromWeb() {
     // Try multiple selectors
     const selectors = [
       'article.post',
-      'article.type-post',
-      '.post-item',
-      'article',
-      '.entry-card'
+      '.post',
+      '.entry',
+      'article'
     ];
     
     for (const selector of selectors) {
       $(selector).each((i, el) => {
-        if (articles.length >= 12) return false;
+        if (articles.length >= 10) return false;
         
         const $el = $(el);
         
         // Extract title
-        const title = $el.find('h2.entry-title a, h3 a, .entry-title a, h2 a').first().text().trim();
+        const title = $el.find('h2 a, h3 a, .entry-title a, .post-title a').first().text().trim();
         if (!title) return;
         
         // Extract excerpt
-        const excerpt = $el.find('.entry-excerpt, .entry-summary, .excerpt, p').first().text().trim();
+        const excerpt = $el.find('.entry-summary, .excerpt, p').first().text().trim();
         
         // Extract date
         const dateAttr = $el.find('time').attr('datetime');
@@ -56,16 +55,16 @@ async function fetchFromWeb() {
         const date = dateParser.parse(dateAttr || dateText, new Date());
         
         // Extract image
-        let image = $el.find('.entry-thumb img, .featured-image img, img').first().attr('src') || 
-                   $el.find('.entry-thumb img, .featured-image img, img').first().attr('data-src') || 
-                   $el.find('.entry-thumb img, .featured-image img, img').first().attr('data-lazy-src') || '';
+        let image = $el.find('img').first().attr('src') || 
+                   $el.find('img').first().attr('data-src') || '';
+        if (image.startsWith('//')) image = `https:${image}`;
         
         // Extract link
-        const link = $el.find('h2.entry-title a, h3 a, .entry-title a, h2 a').first().attr('href') || '';
+        const link = $el.find('h2 a, h3 a, .entry-title a, .post-title a').first().attr('href') || '';
         
-        // Extract category/tags
+        // Extract tags
         const tags = [];
-        $el.find('.entry-category a, .cat-links a, .category a').each((i, tag) => {
+        $el.find('.cat-links a, .category a, .tags a').each((i, tag) => {
           const tagText = $(tag).text().trim().toLowerCase();
           if (tagText) tags.push(tagText);
         });
@@ -73,13 +72,13 @@ async function fetchFromWeb() {
         if (title && link) {
           articles.push({
             title,
-            slug: generateSlug(title, 'animecorner'),
-            source: 'Anime Corner',
+            slug: generateSlug(title, 'animeherald'),
+            source: 'Anime Herald',
             excerpt: excerpt.substring(0, 200) || `${title.slice(0, 120)}...`,
             date: date.toISOString(),
             image,
             link,
-            tags: tags.length > 0 ? tags : ['community', 'news']
+            tags: tags.length > 0 ? tags : ['news', 'anime']
           });
         }
       });
@@ -87,10 +86,10 @@ async function fetchFromWeb() {
       if (articles.length > 0) break;
     }
     
-    console.log(`[AnimeCorner] Found ${articles.length} articles from web`);
+    console.log(`[AnimeHerald] Found ${articles.length} articles from web`);
     return articles;
   } catch (error) {
-    console.error('[AnimeCorner] Web fetch error:', error.message);
+    console.error('[AnimeHerald] Web fetch error:', error.message);
     return [];
   }
 }
@@ -100,12 +99,12 @@ async function fetchFromWeb() {
  */
 async function fetchFromRSS() {
   try {
-    console.log('[AnimeCorner] Fetching from RSS...');
+    console.log('[AnimeHerald] Fetching from RSS...');
     
-    const feed = await rssParser.parseURL(AC_RSS);
+    const feed = await rssParser.parseURL(AH_RSS);
     const articles = [];
     
-    feed.items.slice(0, 12).forEach(item => {
+    feed.items.slice(0, 10).forEach(item => {
       const title = item.title?.trim();
       const excerpt = item.contentSnippet || '';
       const date = dateParser.parse(item.pubDate || item.isoDate, new Date());
@@ -119,13 +118,13 @@ async function fetchFromRSS() {
       }
       
       // Extract categories
-      const tags = item.categories?.map(c => c.toLowerCase()) || ['community', 'news'];
+      const tags = item.categories?.map(c => c.toLowerCase()) || ['news', 'anime'];
       
       if (title && link) {
         articles.push({
           title,
-          slug: generateSlug(title, 'animecorner'),
-          source: 'Anime Corner',
+          slug: generateSlug(title, 'animeherald'),
+          source: 'Anime Herald',
           excerpt: excerpt.substring(0, 200) || `${title.slice(0, 120)}...`,
           date: date.toISOString(),
           image,
@@ -135,10 +134,10 @@ async function fetchFromRSS() {
       }
     });
     
-    console.log(`[AnimeCorner] Found ${articles.length} articles from RSS`);
+    console.log(`[AnimeHerald] Found ${articles.length} articles from RSS`);
     return articles;
   } catch (error) {
-    console.error('[AnimeCorner] RSS fetch error:', error.message);
+    console.error('[AnimeHerald] RSS fetch error:', error.message);
     return [];
   }
 }
@@ -160,17 +159,17 @@ module.exports = async (retries = 2) => {
       }
       
       if (i < retries) {
-        console.log(`[AnimeCorner] Retry ${i + 1}/${retries}...`);
+        console.log(`[AnimeHerald] Retry ${i + 1}/${retries}...`);
         await new Promise(r => setTimeout(r, 1000 * (i + 1)));
       }
     } catch (error) {
-      console.error(`[AnimeCorner] Attempt ${i + 1} failed:`, error.message);
+      console.error(`[AnimeHerald] Attempt ${i + 1} failed:`, error.message);
       if (i < retries) {
         await new Promise(r => setTimeout(r, 1000 * (i + 1)));
       }
     }
   }
   
-  console.error('[AnimeCorner] All fetch attempts failed');
+  console.error('[AnimeHerald] All fetch attempts failed');
   return [];
 };
