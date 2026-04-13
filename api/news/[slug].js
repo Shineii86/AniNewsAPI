@@ -1,39 +1,89 @@
 const cacheHandler = require('../../utils/cacheHandler');
 const contentParser = require('../../utils/contentParser');
 
+/**
+ * Get article by slug
+ */
 module.exports = async (req, res) => {
   const { slug } = req.query;
   
   if (!slug) {
-    return res.status(400).json({ error: 'Missing slug parameter' });
+    return res.status(400).json({
+      success: false,
+      error: 'Missing slug parameter',
+      message: 'Please provide a slug parameter'
+    });
   }
   
   try {
-    const cachedNews = cacheHandler.get('news') || [];
-    const article = cachedNews.find(a => a.slug === slug);
+    // Try to find article in cache
+    const cachedNews = cacheHandler.get('news_all') || [];
+    let article = cachedNews.find(a => a.slug === slug);
     
+    // If not found in all, check other source caches
     if (!article) {
-      return res.status(404).json({ error: 'Article not found' });
+      const sources = ['ann', 'animecorner', 'myanimelist', 'otakuusa', 'crunchyroll', 'animeherald', 'comicbook'];
+      for (const source of sources) {
+        const sourceNews = cacheHandler.get(`news_${source}`) || [];
+        article = sourceNews.find(a => a.slug === slug);
+        if (article) break;
+      }
     }
     
-    // Check for cached content
-    const cachedArticle = cacheHandler.get(`article-${slug}`);
-    if (cachedArticle) {
-      return res.json(cachedArticle);
+    if (!article) {
+      return res.status(404).json({
+        success: false,
+        error: 'Article not found',
+        message: `No article found with slug: ${slug}`
+      });
+    }
+    
+    // Check for cached full content
+    const contentCacheKey = `article-content-${slug}`;
+    const cachedContent = cacheHandler.get(contentCacheKey);
+    
+    if (cachedContent) {
+      console.log(`[Slug API] Cache hit for article: ${slug}`);
+      return res.json({
+        success: true,
+        data: {
+          ...article,
+          ...cachedContent
+        },
+        meta: {
+          cached: true,
+          timestamp: new Date().toISOString()
+        }
+      });
     }
     
     // Fetch full content
-    const content = await contentParser.parseContent(article.link);
-    const fullArticle = { ...article, content };
+    console.log(`[Slug API] Fetching full content for: ${slug}`);
+    const fullContent = await contentParser.parseContent(article.link);
     
-    // Cache article content for 1 hour
-    cacheHandler.set(`article-${slug}`, fullArticle, 3600);
+    // Cache content for 1 hour
+    cacheHandler.set(contentCacheKey, fullContent, 3600);
     
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Cache-Control', 'public, max-age=3600');
-    res.json(fullArticle);
+    res.setHeader('Cache-Control', 'public, max-age=1800');
+    
+    res.json({
+      success: true,
+      data: {
+        ...article,
+        ...fullContent
+      },
+      meta: {
+        cached: false,
+        timestamp: new Date().toISOString()
+      }
+    });
   } catch (error) {
-    console.error('Article fetch error:', error);
-    res.status(500).json({ error: 'Failed to fetch article content' });
+    console.error('[Slug API] Error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch article content',
+      message: error.message
+    });
   }
 };
