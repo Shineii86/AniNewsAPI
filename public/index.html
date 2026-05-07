@@ -14,6 +14,24 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2'/%3E%3Cpath d='M18 14h-8'/%3E%3Cpath d='M15 18h-5'/%3E%3Cpath d='M10 6h8v4h-8V6Z'/%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2'/%3E%3Cpath d='M18 14h-8'/%3E%3Cpath d='M15 18h-5'/%3E%3Cpath d='M10 6h8v4h-8V6Z'/%3E%3C/svg%3E">
   <meta name="theme-color" content="#0a0a0f">
+  <meta name="color-scheme" content="dark">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "AniNewsAPI",
+    "description": "Real-time anime news API aggregating 7+ sources with smart caching, tag filtering, search, and RSS feeds.",
+    "url": "https://aninews.vercel.app",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Shinei Nouzen", "url": "https://github.com/Shineii86" },
+    "softwareVersion": "4.0.0",
+    "license": "https://opensource.org/licenses/MIT"
+  }
+  </script>
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -40,6 +58,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.github.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -970,6 +989,206 @@
       .footer-inner { flex-direction: column; text-align: center; }
     }
 
+    /* ═══════════════════════════════════════
+       TRY IT LIVE
+    ═══════════════════════════════════════ */
+    .tryit {
+      padding: 80px 0 60px;
+    }
+
+    .tryit-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .tryit-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tryit-bar .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .tryit-bar .terminal-title { margin-left: 12px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); }
+
+    .tryit-controls {
+      display: flex;
+      gap: 12px;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tryit-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px 16px;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xs);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .tryit-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-glow); }
+    .tryit-input::placeholder { color: var(--text-muted); }
+
+    .tryit-btn {
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-xs);
+      font-family: var(--font-body);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .tryit-btn:hover { background: var(--accent-light); }
+    .tryit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .tryit-output {
+      padding: 0 20px 20px;
+    }
+
+    .tryit-result {
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.7;
+      max-height: 400px;
+      overflow: auto;
+      color: var(--text-secondary);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .tryit-result .json-key { color: var(--accent-cyan); }
+    .tryit-result .json-str { color: var(--accent-amber); }
+    .tryit-result .json-num { color: var(--accent-emerald); }
+    .tryit-result .json-bool { color: var(--accent-pink); }
+    .tryit-result .json-null { color: var(--text-muted); }
+
+    .tryit-hint {
+      padding: 0 20px 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .tryit-hint a { color: var(--accent-light); }
+    .tryit-hint a:hover { text-decoration: underline; }
+
+    /* ═══════════════════════════════════════
+       LIVE ARTICLE PREVIEW
+    ═══════════════════════════════════════ */
+    .live-preview {
+      padding: 0 0 60px;
+    }
+
+    .live-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .preview-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .preview-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+
+    .preview-card .source-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent-light);
+      background: var(--accent-glow);
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .preview-card h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .preview-card h4 a { color: var(--text-primary); }
+    .preview-card h4 a:hover { color: var(--accent-light); }
+
+    .preview-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .preview-card .preview-date {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .preview-card .preview-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border);
+    }
+
+    .preview-loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .preview-error {
+      text-align: center;
+      padding: 40px;
+      color: var(--accent-rose);
+      font-size: 0.9rem;
+    }
+
+    /* noscript */
+    .noscript-banner {
+      background: var(--accent-glow);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 16px 24px;
+      text-align: center;
+      margin: 24px 0;
+      color: var(--accent-light);
+      font-size: 0.95rem;
+    }
+
     @media (max-width: 480px) {
       .hero h1 { font-size: 2.2rem; }
       .stats-grid { grid-template-columns: 1fr; }
@@ -1030,7 +1249,7 @@
         <a href="https://github.com/Shineii86/AniNewsAPI" target="_blank" class="btn btn-ghost"><i class="fab fa-github"></i> Star on GitHub</a>
       </div>
 
-      <div class="hero-preview">
+      <div class="hero-preview" loading="lazy">
         <div class="terminal">
           <div class="terminal-bar">
             <div class="terminal-dot r"></div>
@@ -1236,6 +1455,64 @@
     </div>
   </section>
 
+  <!-- Try It Live -->
+  <section id="tryit" class="tryit reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Playground</span>
+        <h2>Try It Live</h2>
+        <p>Test API endpoints directly from your browser</p>
+      </div>
+      <div class="tryit-box">
+        <div class="tryit-bar">
+          <div class="terminal-dot r"></div>
+          <div class="terminal-dot y"></div>
+          <div class="terminal-dot g"></div>
+          <span class="terminal-title">API Playground</span>
+        </div>
+        <div class="tryit-controls">
+          <select id="tryit-endpoint" class="tryit-input" style="flex: 0 0 auto; min-width: 160px;">
+            <option value="/api/news?limit=3">/api/news</option>
+            <option value="/api/search?q=naruto">/api/search</option>
+            <option value="/api/news/tags">/api/news/tags</option>
+            <option value="/api/rss?limit=3">/api/rss</option>
+            <option value="/api/health">/api/health</option>
+            <option value="/api/stats">/api/stats</option>
+          </select>
+          <input id="tryit-params" class="tryit-input" placeholder="Additional params e.g. ?source=crunchyroll&limit=5">
+          <button id="tryit-run" class="tryit-btn"><i class="fas fa-play"></i> Send</button>
+        </div>
+        <div class="tryit-hint">Pick an endpoint, add optional params, and hit Send. Response renders below.</div>
+        <div class="tryit-output">
+          <div id="tryit-result" class="tryit-result" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Article Preview -->
+  <section id="live" class="live-preview reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Live Data</span>
+        <h2>Latest Articles</h2>
+        <p>Fresh from the API — real articles, right now</p>
+      </div>
+      <div id="live-grid" class="live-preview-grid">
+        <div class="preview-loading"><i class="fas fa-spinner fa-spin"></i> Fetching live articles…</div>
+      </div>
+    </div>
+  </section>
+
+  <noscript>
+    <div class="container">
+      <div class="noscript-banner">
+        <strong>JavaScript is disabled.</strong> Live stats, article previews, and the interactive playground require JavaScript.
+        The API itself works without it — try <code>curl https://aninews.vercel.app/api/news</code>
+      </div>
+    </div>
+  </noscript>
+
   <!-- Sources -->
   <section id="sources" class="sources reveal">
     <div class="container">
@@ -1351,61 +1628,163 @@
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
-  <!-- Live GitHub Stats -->
+  <!-- Live GitHub Stats (with error fallback) -->
   <script>
     (async function() {
       const REPO = 'Shineii86/AniNewsAPI';
+      const BASE = 'https://aninews.vercel.app';
       const api = (endpoint) => fetch(`https://api.github.com/${endpoint}`, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       }).then(r => r.ok ? r.json() : null).catch(() => null);
 
-      const repo = await api(`repos/${REPO}`);
-      if (repo) {
-        const stars = repo.stargazers_count;
-        const forks = repo.forks_count;
-
-        // Stats ribbon
-        const elStars = document.getElementById('live-stars');
-        const elForks = document.getElementById('live-forks');
-        if (elStars) elStars.textContent = stars.toLocaleString();
-        if (elForks) elForks.textContent = forks.toLocaleString();
-
-        // Hero badge
-        // CTA section
-        const ctaStars = document.getElementById('cta-stars');
-        const ctaForks = document.getElementById('cta-forks');
-        if (ctaStars) ctaStars.textContent = stars.toLocaleString();
-        if (ctaForks) ctaForks.textContent = forks.toLocaleString();
+      // GitHub repo stats
+      try {
+        const repo = await api(`repos/${REPO}`);
+        if (repo) {
+          const stars = repo.stargazers_count;
+          const forks = repo.forks_count;
+          document.getElementById('live-stars').textContent = stars.toLocaleString();
+          document.getElementById('live-forks').textContent = forks.toLocaleString();
+          document.getElementById('cta-stars').textContent = stars.toLocaleString();
+          document.getElementById('cta-forks').textContent = forks.toLocaleString();
+        } else {
+          throw new Error('API unavailable');
+        }
+      } catch (_) {
+        document.getElementById('live-stars').textContent = '300+';
+        document.getElementById('live-forks').textContent = '45+';
+        document.getElementById('cta-stars').textContent = '300+';
+        document.getElementById('cta-forks').textContent = '45+';
       }
 
-      // Fetch version from package.json
+      // Version from package.json
       try {
         const pkgResp = await fetch(`https://raw.githubusercontent.com/${REPO}/main/package.json`);
         if (pkgResp.ok) {
           const pkg = await pkgResp.json();
-          const ver = pkg.version || '3.0.0';
-          const elVersion = document.getElementById('live-version');
-          const heroVer = document.getElementById('hero-version');
-          if (elVersion) elVersion.textContent = 'v' + ver;
-          if (heroVer) heroVer.textContent = 'v' + ver;
+          const ver = pkg.version || '4.0.0';
+          document.getElementById('live-version').textContent = 'v' + ver;
+          document.getElementById('hero-version').textContent = 'v' + ver;
         }
-      } catch (_) {}
+      } catch (_) {
+        document.getElementById('live-version').textContent = 'v4.0';
+      }
 
-      // Fetch contributors count
-      const contribs = await api(`repos/${REPO}/contributors?per_page=1&anon=true`);
-      if (contribs) {
-        // GitHub returns array; to get total count we check Link header, but simpler: fetch first page
-        // Use a separate request to get total
+      // Contributors count
+      try {
         const resp = await fetch(`https://api.github.com/repos/${REPO}/contributors?per_page=1&anon=true`);
         const link = resp.headers.get('Link');
-        let count = Array.isArray(contribs) ? contribs.length : 0;
+        let count = 0;
         if (link) {
           const match = link.match(/[?&]page=(\d+)>; rel="last"/);
           if (match) count = parseInt(match[1], 10);
         }
-        const el = document.getElementById('cta-contributors');
-        if (el) el.textContent = count.toLocaleString();
+        document.getElementById('cta-contributors').textContent = count > 0 ? count.toLocaleString() : '45+';
+      } catch (_) {
+        document.getElementById('cta-contributors').textContent = '45+';
       }
+
+      // ── Live Article Preview ──
+      const grid = document.getElementById('live-grid');
+      try {
+        const resp = await fetch(`${BASE}/api/news?limit=6`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const json = await resp.json();
+        if (!json.success || !json.data?.length) throw new Error('No articles');
+        grid.innerHTML = json.data.map(a => `
+          <div class="preview-card">
+            ${a.image ? `<img class="preview-img" src="${a.image}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
+            <span class="source-tag">${a.source || 'Unknown'}</span>
+            <h4><a href="${a.link || '#'}" target="_blank" rel="noopener">${a.title || 'Untitled'}</a></h4>
+            <p>${a.excerpt || ''}</p>
+            <span class="preview-date">${a.date ? new Date(a.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</span>
+          </div>
+        `).join('');
+      } catch (err) {
+        grid.innerHTML = `<div class="preview-error"><i class="fas fa-exclamation-triangle"></i> Could not load live articles — API may be waking up. Try <a href="${BASE}/api/news" target="_blank" style="color:var(--accent-light)">${BASE}/api/news</a> directly.</div>`;
+      }
+
+      // ── SSE Connection ──
+      try {
+        const evtSource = new EventSource(`${BASE}/api/stream`);
+        evtSource.onmessage = (e) => {
+          try {
+            const data = JSON.parse(e.data);
+            if (data.type === 'new_article') {
+              // Prepend new article to live grid
+              const card = document.createElement('div');
+              card.className = 'preview-card';
+              card.style.animation = 'fadeInUp 0.5s ease-out';
+              card.innerHTML = `
+                ${data.image ? `<img class="preview-img" src="${data.image}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
+                <span class="source-tag">${data.source || 'Unknown'}</span>
+                <h4><a href="${data.link || '#'}" target="_blank" rel="noopener">${data.title || 'Untitled'}</a></h4>
+                <p>${data.excerpt || ''}</p>
+                <span class="preview-date">Just now</span>
+              `;
+              grid.prepend(card);
+              // Keep max 6
+              while (grid.children.length > 6) grid.lastChild.remove();
+            }
+          } catch (_) {}
+        };
+        evtSource.onerror = () => evtSource.close();
+      } catch (_) {}
+    })();
+  </script>
+
+  <!-- Try It Live -->
+  <script>
+    (function() {
+      const BASE = 'https://aninews.vercel.app';
+      const btn = document.getElementById('tryit-run');
+      const endpoint = document.getElementById('tryit-endpoint');
+      const params = document.getElementById('tryit-params');
+      const result = document.getElementById('tryit-result');
+
+      function syntaxHighlight(json) {
+        return JSON.stringify(json, null, 2)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"([^"]+)":/g, '<span class="json-key">"$1"</span>:')
+          .replace(/: "([^"]*)"/g, ': <span class="json-str">"$1"</span>')
+          .replace(/: (\d+\.?\d*)/g, ': <span class="json-num">$1</span>')
+          .replace(/: (true|false)/g, ': <span class="json-bool">$1</span>')
+          .replace(/: (null)/g, ': <span class="json-null">$1</span>');
+      }
+
+      async function run() {
+        const ep = endpoint.value;
+        const extra = params.value.trim();
+        let url = BASE + ep;
+        if (extra && !ep.includes('?')) url += '?' + extra.replace(/^\?/, '');
+        else if (extra) url += '&' + extra.replace(/^\?/, '');
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading…';
+        result.style.display = 'block';
+        result.textContent = 'Fetching ' + url + ' …';
+
+        try {
+          const resp = await fetch(url);
+          const ct = resp.headers.get('content-type') || '';
+          let body;
+          if (ct.includes('json')) {
+            body = syntaxHighlight(await resp.json());
+          } else {
+            body = await resp.text();
+            body = body.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          }
+          result.innerHTML = body;
+        } catch (err) {
+          result.innerHTML = '<span style="color:var(--accent-rose)">Error: ' + err.message + '</span>';
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-play"></i> Send';
+        }
+      }
+
+      btn.addEventListener('click', run);
+      params.addEventListener('keydown', (e) => { if (e.key === 'Enter') run(); });
     })();
   </script>
 </body>

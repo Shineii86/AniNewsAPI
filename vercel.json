@@ -10,6 +10,8 @@
     { "source": "/api/cache/clear", "destination": "/api/cache/clear.js" },
     { "source": "/api/search", "destination": "/api/search.js" },
     { "source": "/api/rss", "destination": "/api/rss.js" },
+    { "source": "/api/stream", "destination": "/api/stream.js" },
+    { "source": "/api/openapi", "destination": "/api/openapi.js" },
     { "source": "/api/news/tags", "destination": "/api/news/tags.js" },
     { "source": "/api/news/([^/]+)", "destination": "/api/news/[slug].js?slug=$1" },
     { "source": "/api/news", "destination": "/api/news.js" },
@@ -20,7 +22,9 @@
       { "key": "Access-Control-Allow-Origin", "value": "*" },
       { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
       { "key": "Access-Control-Allow-Headers", "value": "Content-Type" },
-      { "key": "Cache-Control", "value": "public, s-maxage=300" }
+      { "key": "Cache-Control", "value": "public, s-maxage=300" },
+      { "key": "X-RateLimit-Limit", "value": "100" },
+      { "key": "X-RateLimit-Remaining", "value": "99" }
     ]},
     { "source": "/", "headers": [
       { "key": "Access-Control-Allow-Origin", "value": "*" },

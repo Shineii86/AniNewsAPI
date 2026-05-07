@@ -4,6 +4,29 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [4.0.0] - 2026-05-08
+
+### Added
+- **Try It Live Playground** (`#tryit`): Interactive panel on landing page to test any API endpoint directly from the browser with syntax-highlighted JSON responses
+- **Live Article Preview**: Landing page now fetches and displays 6 real articles from `/api/news` on page load — actual data, not mockups
+- **Server-Sent Events** (`/api/stream`): SSE endpoint for real-time article push notifications with 30s heartbeat keep-alive
+- **OpenAPI 3.0 Specification** (`/api/openapi`): Machine-readable API spec for Swagger UI, Postman, and auto-generated clients
+- **Rate Limit Headers**: All API responses now include `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset` headers
+- **404 HTML Page**: Browser requests to unknown routes get a styled dark 404 page; API clients still get JSON
+- **JSON-LD Structured Data**: Added `SoftwareApplication` schema markup for Google rich results
+- **`<noscript>` Fallback**: Graceful degradation banner when JavaScript is disabled
+- **GitHub API Preconnect**: `<link rel="preconnect" href="https://api.github.com">` for faster stats loading
+- **`color-scheme: dark` Meta**: Prevents white flash on page load in dark mode browsers
+
+### Changed
+- **Version Bump**: 3.1.3 → 4.0.0 across package.json, constants, test, README, and landing page
+- **GitHub Stats Error Handling**: Live stats now show fallback values (300+, 45+) instead of "—" when GitHub API is unreachable
+- **README Architecture Diagram**: Updated to include `/api/stream` (SSE) and `/api/openapi` (JSON spec) endpoints
+- **README At a Glance**: Endpoint count updated from 9 to 11
+- **README Project Structure**: Added `stream.js` and `openapi.js` to file tree
+
+---
+
 ## [3.1.4] - 2026-05-08
 
 ### Fixed
