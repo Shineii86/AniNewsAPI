@@ -11,7 +11,7 @@
 ![Sources](https://img.shields.io/badge/Sources-7-f5c2e7?style=flat-square&labelColor=1e1e2e)
 ![Status](https://img.shields.io/badge/API-Stable-a6e3a1?style=flat-square&labelColor=1e1e2e)
 
-[![API Status](https://img.shields.io/website?down_color=f38ba8&down_message=offline&label=API&style=for-the-badge&up_color=a6e3a1&up_message=online&url=https%3A%2F%2Faninewsapi.vercel.app)](https://aninewsapi.vercel.app)
+[![API Status](https://img.shields.io/website?down_color=f38ba8&down_message=offline&label=API&style=for-the-badge&up_color=a6e3a1&up_message=online&url=https%3A%2F%2Faninews.vercel.app)](https://aninews.vercel.app)
 ![Last Commit](https://img.shields.io/github/last-commit/Shineii86/AniNewsAPI?style=for-the-badge)
 ![Repo Size](https://img.shields.io/github/repo-size/Shineii86/AniNewsAPI?style=for-the-badge)
 [![Stars](https://img.shields.io/github/stars/Shineii86/AniNewsAPI?style=for-the-badge)](https://github.com/Shineii86/AniNewsAPI/stargazers)
@@ -162,8 +162,8 @@ Latest anime news from all or specific sources.
 | `refresh` | `boolean` | `false` | Bypass cache |
 
 ```bash
-curl "https://aninewsapi.vercel.app/api/news?limit=10"
-curl "https://aninewsapi.vercel.app/api/news?source=crunchyroll&limit=10&offset=10"
+curl "https://aninews.vercel.app/api/news?limit=10"
+curl "https://aninews.vercel.app/api/news?source=crunchyroll&limit=10&offset=10"
 ```
 
 <details>
@@ -192,8 +192,8 @@ Full-text search with relevance scoring. Title matches rank higher than excerpt 
 | `offset` | ❌ | Pagination |
 
 ```bash
-curl "https://aninewsapi.vercel.app/api/search?q=demon+slayer"
-curl "https://aninewsapi.vercel.app/api/search?q=manga&source=ann&limit=5"
+curl "https://aninews.vercel.app/api/search?q=demon+slayer"
+curl "https://aninews.vercel.app/api/search?q=manga&source=ann&limit=5"
 ```
 
 ---
@@ -203,8 +203,8 @@ curl "https://aninewsapi.vercel.app/api/search?q=manga&source=ann&limit=5"
 List available tags with counts, or filter articles by tag.
 
 ```bash
-curl "https://aninewsapi.vercel.app/api/news/tags"
-curl "https://aninewsapi.vercel.app/api/news/tags?tag=official"
+curl "https://aninews.vercel.app/api/news/tags"
+curl "https://aninews.vercel.app/api/news/tags?tag=official"
 ```
 
 ---
@@ -214,7 +214,7 @@ curl "https://aninewsapi.vercel.app/api/news/tags?tag=official"
 Full article content extraction.
 
 ```bash
-curl "https://aninewsapi.vercel.app/api/news/ann-demon-slayer-season-4-announced"
+curl "https://aninews.vercel.app/api/news/ann-demon-slayer-season-4-announced"
 ```
 
 ---
@@ -229,8 +229,8 @@ Standard RSS 2.0 XML feed. Works with any feed reader.
 | `limit` | `20` | Max items |
 
 ```bash
-curl "https://aninewsapi.vercel.app/api/rss"
-curl "https://aninewsapi.vercel.app/api/rss?source=crunchyroll&limit=10"
+curl "https://aninews.vercel.app/api/rss"
+curl "https://aninews.vercel.app/api/rss?source=crunchyroll&limit=10"
 ```
 
 ---

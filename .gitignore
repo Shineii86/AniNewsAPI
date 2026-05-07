@@ -4,3 +4,4 @@ data/*.json
 .DS_Store
 *.log
 .vercel/
+.vercel

@@ -31,7 +31,7 @@ function generateRSS(articles, source) {
   <channel>
     <title>${escapeXml(APP_NAME)} - ${escapeXml(sourceLabel)}</title>
     <description>Latest anime news from ${escapeXml(sourceLabel)}</description>
-    <link>https://aninewsapi.vercel.app</link>
+    <link>https://aninews.vercel.app</link>
     <language>en-us</language>
     <lastBuildDate>${now}</lastBuildDate>
     <generator>${APP_NAME} v${APP_VERSION}</generator>
@@ -45,7 +45,7 @@ function generateRSS(articles, source) {
       <description>${escapeXml(a.excerpt || '')}</description>
       <pubDate>${pubDate}</pubDate>
       <guid isPermaLink="true">${escapeXml(a.link)}</guid>
-      <source url="https://aninewsapi.vercel.app/api/news?source=${encodeURIComponent(a.source.toLowerCase().replace(/\s+/g, ''))}">${escapeXml(a.source)}</source>
+      <source url="https://aninews.vercel.app/api/news?source=${encodeURIComponent(a.source.toLowerCase().replace(/\s+/g, ''))}">${escapeXml(a.source)}</source>
 ${cats}
 `;
     if (a.image) xml += `      <media:thumbnail url="${escapeXml(a.image)}"/>\n`;
