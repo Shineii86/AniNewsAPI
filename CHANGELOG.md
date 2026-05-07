@@ -4,6 +4,16 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [4.0.7] - 2026-05-08
+
+### Added
+- **Full OG Meta Stack**: Enhanced Open Graph tags with `og:image:secure_url`, `og:image:type`, `og:image:width`, `og:image:height`, `og:image:alt` for optimal social media previews
+- **OG namespace prefix**: Added `prefix="og: https://ogp.me/ns#"` to `<html>` tag for proper OG validation
+- **Twitter Card enhancements**: Added `twitter:domain`, `twitter:site`, and `twitter:image:alt` for richer Twitter/X link previews
+- **JSON-LD image field**: Added `image` property to structured data for better search engine rich results
+
+---
+
 ## [4.0.6] - 2026-05-08
 
 ### Added
