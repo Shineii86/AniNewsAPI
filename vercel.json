@@ -1,21 +1,8 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "api/**/*.js", "use": "@vercel/node" },
-    { "src": "index.js", "use": "@vercel/node" }
-  ],
   "rewrites": [
-    { "source": "/api/health", "destination": "/api/health.js" },
-    { "source": "/api/stats", "destination": "/api/stats.js" },
-    { "source": "/api/cache/clear", "destination": "/api/cache/clear.js" },
-    { "source": "/api/search", "destination": "/api/search.js" },
-    { "source": "/api/rss", "destination": "/api/rss.js" },
-    { "source": "/api/stream", "destination": "/api/stream.js" },
-    { "source": "/api/openapi", "destination": "/api/openapi.js" },
-    { "source": "/api/news/tags", "destination": "/api/news/tags.js" },
-    { "source": "/api/news/([^/]+)", "destination": "/api/news/[slug].js?slug=$1" },
-    { "source": "/api/news", "destination": "/api/news.js" },
-    { "source": "/(.*)", "destination": "/index.js" }
+    { "source": "/api/news/tags", "destination": "/api/news/tags" },
+    { "source": "/api/news/([^/]+)", "destination": "/api/news/[slug]?slug=$1" },
+    { "source": "/(.*)", "destination": "/" }
   ],
   "headers": [
     { "source": "/api/(.*)", "headers": [
