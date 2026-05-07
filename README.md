@@ -33,24 +33,14 @@
 
 ## 📊 At a Glance
 
-```
-  ╔══════════════════════════════════════════════════════════════════╗
-  ║                        ▄▄▄  ▄▄   ▄  ▄▄                       ║
-  ║                       ▀▀▀▀▀ ▀▀   ▀  ▀▀                       ║
-  ║                                                                ║
-  ║   ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐ ║
-  ║   │  ◉  7    │    │  ⚡ 11   │    │  ⏱ 200ms │    │  ♻  10m  │ ║
-  ║   │ SOURCES  │    │ ENDPOINTS│    │  CACHED  │    │  REFRESH │ ║
-  ║   └──────────┘    └──────────┘    └──────────┘    └──────────┘ ║
-  ║                                                                ║
-  ║   ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐ ║
-  ║   │  📰 60+  │    │  🔍 FULL │    │  📡 SSE  │    │  📋 OPEN │ ║
-  ║   │ ARTICLES │    │  SEARCH  │    │  STREAM  │    │  API SPEC│ ║
-  ║   └──────────┘    └──────────┘    └──────────┘    └──────────┘ ║
-  ║                                                                ║
-  ║               v4.0.0  ·  MIT License  ·  Node ≥18             ║
-  ╚══════════════════════════════════════════════════════════════════╝
-```
+<table>
+<tr>
+<td align="center" width="25%"><strong>📡 7 Sources</strong><br><sub>ANN · MAL · Crunchyroll<br>Anime Corner · Otaku USA<br>Anime Herald · Comic Book</sub></td>
+<td align="center" width="25%"><strong>⚡ 11 Endpoints</strong><br><sub>News · Search · RSS · SSE<br>Tags · Slug · Health<br>Stats · OpenAPI · Cache</sub></td>
+<td align="center" width="25%"><strong>🚀 ~200ms</strong><br><sub>Cached responses<br>10-min auto-refresh<br>Cross-source dedup</sub></td>
+<td align="center" width="25%"><strong>📰 60+ Articles</strong><br><sub>Full-text search<br>RSS 2.0 feed<br>Pagination support</sub></td>
+</tr>
+</table>
 
 ---
 
@@ -123,57 +113,43 @@
 
 ## 🏗️ Architecture
 
-```
-          ╭──────────────────────────────────────────────────────────╮
-          │                     CLIENT REQUEST                       │
-          ╰──────────────────────────┬───────────────────────────────╯
-                                     │
-          ╭──────────────────────────▼───────────────────────────────╮
-          │               VERCEL EDGE  /  EXPRESS                    │
-          │              ┌──── Rate Limit ────┐                      │
-          │              │   X-RateLimit-*    │                      │
-          │              └───────────────────┘                       │
-          ╰──────────────────────────┬───────────────────────────────╯
-                                     │
-     ╭───────────────────────────────┼───────────────────────────────╮
-     │                               │                               │
-     ▼                               ▼                               ▼
-╭─────────╮   ╭─────────╮   ╭─────────────╮   ╭─────────╮   ╭──────────╮
-│ /news   │   │ /search │   │   /rss      │   │ /health │   │ /stream  │
-│ /tags   │   │ /slug   │   │   /stats    │   │ /openapi│   │   SSE    │
-│ /:slug  │   │         │   │ /cache/clear│   │         │   │          │
-╰────┬────╯   ╰────┬────╯   ╰──────┬──────╯   ╰─────────╯   ╰──────────╯
-     │              │               │
-     ╰──────────────┴───────┬───────╯
-                            │
-                   ╭────────▼────────╮
-                   │                 │
-                   │   CACHE LAYER   │
-                   │   node-cache    │
-                   │   TTL: 10 min   │
-                   │                 │
-                   ╰────────┬────────╯
-                            │ miss
-     ╭──────────────────────┼──────────────────────╮
-     │                      │                      │
-     ▼                      ▼                      ▼
-╭──────────╮         ╭──────────╮           ╭──────────╮
-│    ANN   │         │CRUNCHYRLL│           │   MAL    │
-│  Google  │         │  Google  │           │  Direct  │
-│   News   │         │   News   │           │  Scrape  │
-╰──────────╯         ╰──────────╯           ╰──────────╯
-     │                      │                      │
-     │    ┌─────────────┐   │   ┌─────────────┐    │
-     ├───►│ Anime Corner│   ├──►│ Otaku USA   │◄───┤
-     │    │   Scrape    │   │   │    RSS      │    │
-     │    └─────────────┘   │   └─────────────┘    │
-     │    ┌─────────────┐   │   ┌─────────────┐    │
-     └───►│Anime Herald │   └──►│ Comic Book  │◄───┘
-          │    RSS      │       │   Scrape    │
-          └─────────────┘       └─────────────┘
+**Request Flow**
 
-  Flow:  Request → Cache → Fetch (7 concurrent) → Dedupe → Enrich → Respond
-```
+| Stage | Component | Description |
+|:-----:|-----------|-------------|
+| 1 | **Client** | Browser, app, or `curl` sends request |
+| 2 | **Vercel Edge / Express** | Routes request, applies CORS + rate limit headers |
+| 3 | **Cache Check** | `node-cache` with 10-min TTL — hit = instant response |
+| 4 | **Fetch Sources** | 7 concurrent scrapers (3 retries each, 15s timeout) |
+| 5 | **Deduplicate** | Cross-source dedup by normalized title |
+| 6 | **Enrich & Respond** | Paginate, sort, format → JSON/RSS/SSE |
+
+**Endpoints**
+
+| Endpoint | Method | Description |
+|----------|:------:|-------------|
+| `/api/news` | GET | Latest news with pagination, sorting, source filtering |
+| `/api/news/tags` | GET | Tag listing with counts, or filter by tag |
+| `/api/news/:slug` | GET | Full article content extraction |
+| `/api/search` | GET | Full-text search with relevance scoring |
+| `/api/rss` | GET | RSS 2.0 XML feed |
+| `/api/health` | GET | Status, version, uptime |
+| `/api/stats` | GET | Cache hit/miss metrics |
+| `/api/stream` | GET | Server-Sent Events for real-time push |
+| `/api/openapi` | GET | OpenAPI 3.0.3 specification |
+| `/api/cache/clear` | POST | Manual cache flush |
+
+**Sources**
+
+| Source | Key | Method |
+|--------|-----|--------|
+| Anime News Network | `ann` | Google News RSS |
+| Anime Corner | `animecorner` | Direct Scrape |
+| MyAnimeList | `myanimelist` | Direct Scrape |
+| Otaku USA | `otakuusa` | Google News RSS |
+| Crunchyroll | `crunchyroll` | Google News RSS |
+| Anime Herald | `animeherald` | RSS Feed |
+| Comic Book | `comicbook` | Direct Scrape |
 
 ---
 
