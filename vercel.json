@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/tos", "destination": "/tos.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/api/news/tags", "destination": "/api/news/tags" },
     { "source": "/api/news/([^/]+)", "destination": "/api/news/[slug]?slug=$1" },
     { "source": "/(.*)", "destination": "/" }

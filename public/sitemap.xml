@@ -18,4 +18,12 @@
     <loc>https://aninews.vercel.app/#sources</loc>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://aninews.vercel.app/tos</loc>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://aninews.vercel.app/privacy</loc>
+    <priority>0.3</priority>
+  </url>
 </urlset>

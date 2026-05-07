@@ -4,6 +4,15 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [4.0.4] - 2026-05-08
+
+### Added
+- **Terms of Service page** (`/tos`): Full legal terms covering usage, content ownership, disclaimers, and liability limits.
+- **Privacy Policy page** (`/privacy`): Data collection transparency — covers IP rate limiting, no cookies, no analytics, no PII, data retention policies, and third-party source links.
+- **Footer legal links**: Added Terms and Privacy links in the landing page footer.
+
+---
+
 ## [4.0.3] - 2026-05-08
 
 ### Fixed

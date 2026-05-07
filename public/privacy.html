@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — AniNewsAPI</title>
+  <meta name="description" content="Privacy Policy for AniNewsAPI — Real-time Anime News Aggregation API.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://aninews.vercel.app/privacy">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2'/%3E%3Cpath d='M18 14h-8'/%3E%3Cpath d='M15 18h-5'/%3E%3Cpath d='M10 6h8v4h-8V6Z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0a0a0f; --bg2: #0f0f17; --border: rgba(255,255,255,0.06); --text: #f1f5f9; --text2: #94a3b8; --text3: #64748b; --accent: #a78bfa; --pink: #ec4899; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Space Grotesk', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; }
+    .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+    header { padding: 24px 0; border-bottom: 1px solid var(--border); }
+    header a { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 1.1rem; }
+    header a:hover { text-decoration: underline; }
+    main { padding: 60px 0 80px; }
+    h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .updated { color: var(--text3); font-size: 0.9rem; margin-bottom: 40px; }
+    h2 { font-size: 1.3rem; font-weight: 600; margin: 32px 0 12px; color: var(--text); }
+    p, li { color: var(--text2); font-size: 1rem; margin-bottom: 12px; }
+    ul { padding-left: 24px; }
+    li { margin-bottom: 8px; }
+    a { color: var(--accent); }
+    a:hover { text-decoration: underline; }
+    .back { display: inline-block; margin-top: 40px; color: var(--accent); text-decoration: none; font-weight: 500; }
+    .back:hover { text-decoration: underline; }
+    footer { border-top: 1px solid var(--border); padding: 24px 0; text-align: center; color: var(--text3); font-size: 0.85rem; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th, td { text-align: left; padding: 10px 14px; border: 1px solid var(--border); color: var(--text2); font-size: 0.95rem; }
+    th { background: var(--bg2); color: var(--text); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container"><a href="/">← AniNewsAPI</a></div>
+  </header>
+  <main>
+    <div class="container">
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: <span id="date"></span></p>
+
+      <h2>1. Overview</h2>
+      <p>AniNewsAPI ("we", "us", "the Service") is committed to protecting your privacy. This policy explains what data we collect, how we use it, and your rights.</p>
+
+      <h2>2. Data We Collect</h2>
+      <table>
+        <tr><th>Data Type</th><th>Collected?</th><th>Purpose</th></tr>
+        <tr><td>IP Address</td><td>Yes (transient)</td><td>Rate limiting (100 req/min). Stored in memory only, not persisted to disk.</td></tr>
+        <tr><td>Request Headers</td><td>Temporarily</td><td>Logging and debugging. Not stored permanently.</td></tr>
+        <tr><td>API Query Parameters</td><td>No</td><td>Not logged or stored.</td></tr>
+        <tr><td>Personal Information</td><td>No</td><td>We do not collect names, emails, or any PII from API users.</td></tr>
+        <tr><td>Cookies</td><td>No</td><td>The Service does not set or read cookies.</td></tr>
+        <tr><td>Analytics</td><td>No</td><td>No third-party analytics or tracking scripts.</td></tr>
+      </table>
+
+      <h2>3. How We Use Data</h2>
+      <ul>
+        <li><strong>Rate limiting:</strong> IP addresses are used solely to enforce rate limits and are stored in memory (cleared every 5 minutes).</li>
+        <li><strong>Logging:</strong> Server logs record request method, path, and timestamp for debugging. Logs are not exported or shared.</li>
+        <li><strong>Caching:</strong> API responses are cached in memory and on disk (<code>/tmp</code> on serverless) to improve performance. Cached data contains only news article metadata from third-party sources.</li>
+      </ul>
+
+      <h2>4. Third-Party Content</h2>
+      <p>The Service fetches and serves content from the following third-party sources. Each source has its own privacy policy:</p>
+      <ul>
+        <li><a href="https://www.animenewsnetwork.com/privacy" target="_blank">Anime News Network</a></li>
+        <li><a href="https://www.crunchyroll.com/privacy" target="_blank">Crunchyroll</a></li>
+        <li><a href="https://myanimelist.net/about/privacy" target="_blank">MyAnimeList</a></li>
+        <li><a href="https://animecorner.me/privacy-policy/" target="_blank">Anime Corner</a></li>
+        <li><a href="https://otakuusamagazine.com/privacy-policy/" target="_blank">Otaku USA</a></li>
+        <li><a href="https://www.animeherald.com/privacy-policy/" target="_blank">Anime Herald</a></li>
+        <li><a href="https://comicbook.com/privacy/" target="_blank">Comic Book</a></li>
+      </ul>
+
+      <h2>5. Data Sharing</h2>
+      <p>We do <strong>not</strong> sell, trade, or share any user data with third parties. The only external calls made by the Service are to the news sources listed above (to fetch articles) and to the GitHub API (for live stats on the landing page).</p>
+
+      <h2>6. Data Retention</h2>
+      <ul>
+        <li><strong>Rate limit buckets:</strong> Cleared every 5 minutes.</li>
+        <li><strong>Cache files:</strong> Expire after 10 minutes (configurable via <code>CACHE_TTL</code>).</li>
+        <li><strong>Server logs:</strong> Retained by the hosting provider (Vercel) per their retention policy.</li>
+      </ul>
+
+      <h2>7. Security</h2>
+      <p>The Service is served over HTTPS. We implement CORS headers, rate limiting, and input validation. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.</p>
+
+      <h2>8. Children's Privacy</h2>
+      <p>The Service is not directed at children under 13. We do not knowingly collect data from children.</p>
+
+      <h2>9. Your Rights</h2>
+      <p>Since we do not collect personal data, there is no user data to access, modify, or delete. If you believe your IP address was logged and wish to have it removed, contact us and we will purge relevant logs.</p>
+
+      <h2>10. Changes to This Policy</h2>
+      <p>We may update this Privacy Policy at any time. Changes will be posted on this page with an updated date.</p>
+
+      <h2>11. Contact</h2>
+      <p>For privacy concerns, contact us via <a href="https://github.com/Shineii86/AniNewsAPI/issues" target="_blank">GitHub Issues</a> or <a href="mailto:ikx7a@hotmail.com">email</a>.</p>
+
+      <a href="/" class="back">← Back to AniNewsAPI</a>
+    </div>
+  </main>
+  <footer>
+    <div class="container">&copy; <span id="year"></span> Shinei Nouzen &middot; All Rights Reserved</div>
+  </footer>
+  <script>
+    document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
