@@ -15,6 +15,10 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 - **Constants Module** (`utils/constants.js`): Centralized configuration for version, limits, timeouts, user agent, and CORS headers
 - **Tag Counts**: `/api/news/tags` now returns article count per tag, sorted by popularity
 - **CORS Preflight**: All API endpoints now handle OPTIONS preflight requests in code
+- **Favicon**: SVG emoji favicon (📰) with Apple Touch Icon support
+- **Open Graph Meta**: Full OG tags for Facebook/social media link previews
+- **Twitter Cards**: Large image card with title, description, and preview
+- **SEO Metadata**: Canonical URL, keywords, robots, theme-color, apple-mobile-web-app tags
 - **README Overhaul**: Complete rewrite with architecture diagram, feature matrix, structured endpoint docs, and project structure
 
 ### Changed
