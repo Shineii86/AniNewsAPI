@@ -10,51 +10,6 @@ module.exports = (req, res) => {
   try {
     const accept = req.headers.accept || '';
 
-    // ── robots.txt ──
-    if (req.url === '/robots.txt') {
-      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-      res.setHeader('Cache-Control', 'public, s-maxage=86400');
-      return res.status(200).send(
-`User-agent: *
-Allow: /
-Disallow: /api/
-
-Sitemap: https://aninews.vercel.app/sitemap.xml
-
-# AniNewsAPI — Real-time Anime News Aggregation API
-`
-      );
-    }
-
-    // ── sitemap.xml ──
-    if (req.url === '/sitemap.xml') {
-      res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-      res.setHeader('Cache-Control', 'public, s-maxage=86400');
-      return res.status(200).send(
-`<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://aninews.vercel.app/</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://aninews.vercel.app/#features</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://aninews.vercel.app/#docs</loc>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://aninews.vercel.app/#sources</loc>
-    <priority>0.7</priority>
-  </url>
-</urlset>`
-      );
-    }
-
     // ── Landing page (cached in memory) ──
     if (accept.includes('text/html') || req.url === '/' || req.url === '') {
       const filePath = path.join(__dirname, 'public', 'index.html');

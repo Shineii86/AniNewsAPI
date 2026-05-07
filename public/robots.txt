@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://aninews.vercel.app/sitemap.xml
+
+# AniNewsAPI — Real-time Anime News Aggregation API
