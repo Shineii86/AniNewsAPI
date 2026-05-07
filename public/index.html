@@ -38,7 +38,7 @@
   <meta property="og:url" content="https://aninews.vercel.app">
   <meta property="og:title" content="AniNewsAPI | Real-time Anime Headlines">
   <meta property="og:description" content="A powerful, serverless API aggregating anime news from 7 sources — with smart caching, keyword search, RSS feeds, and full-article extraction.">
-  <meta property="og:image" content="https://opengraph.githubassets.com/1/Shineii86/AniNewsAPI">
+  <meta property="og:image" content="https://aninews.vercel.app/og-image.png">
   <meta property="og:site_name" content="AniNewsAPI">
   <meta property="og:locale" content="en_US">
 
@@ -47,7 +47,7 @@
   <meta name="twitter:url" content="https://aninews.vercel.app">
   <meta name="twitter:title" content="AniNewsAPI | Real-time Anime Headlines">
   <meta name="twitter:description" content="A powerful, serverless API aggregating anime news from 7 sources — with smart caching, keyword search, RSS feeds, and full-article extraction.">
-  <meta name="twitter:image" content="https://opengraph.githubassets.com/1/Shineii86/AniNewsAPI">
+  <meta name="twitter:image" content="https://aninews.vercel.app/og-image.png">
   <meta name="twitter:creator" content="@shineii86">
 
   <!-- Additional SEO -->
@@ -62,6 +62,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="alternate" type="application/rss+xml" title="AniNewsAPI RSS Feed" href="/api/rss">
+  <link rel="manifest" href="/manifest.json">
 
   <style>
     /* ═══════════════════════════════════════
@@ -1629,60 +1630,84 @@
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
-  <!-- Live GitHub Stats (with error fallback) -->
+  <!-- Live GitHub Stats (localStorage cached) -->
   <script>
     (async function() {
       const REPO = 'Shineii86/AniNewsAPI';
       const BASE = window.location.origin;
-      const api = (endpoint) => fetch(`https://api.github.com/${endpoint}`, {
+      const CACHE_KEY = 'aninews_gh_stats';
+      const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
+      // ── Load from cache first ──
+      let cached = null;
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (raw) {
+          cached = JSON.parse(raw);
+          if (Date.now() - cached.ts < CACHE_TTL) {
+            applyStats(cached);
+          } else {
+            cached = null; // expired
+          }
+        }
+      } catch (_) {}
+
+      // ── Apply cached/fresh stats to DOM ──
+      function applyStats(s) {
+        if (s.stars != null) {
+          document.getElementById('live-stars').textContent = s.stars;
+          document.getElementById('cta-stars').textContent = s.stars;
+        }
+        if (s.forks != null) {
+          document.getElementById('live-forks').textContent = s.forks;
+          document.getElementById('cta-forks').textContent = s.forks;
+        }
+        if (s.version) {
+          document.getElementById('live-version').textContent = s.version;
+          document.getElementById('hero-version').textContent = s.version;
+        }
+        if (s.contributors) {
+          document.getElementById('cta-contributors').textContent = s.contributors;
+        }
+      }
+
+      // ── Fetch fresh data (background if cache was served) ──
+      const stats = { ts: Date.now() };
+      const api = (ep) => fetch(`https://api.github.com/${ep}`, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       }).then(r => r.ok ? r.json() : null).catch(() => null);
 
-      // GitHub repo stats
       try {
         const repo = await api(`repos/${REPO}`);
         if (repo) {
-          const stars = repo.stargazers_count;
-          const forks = repo.forks_count;
-          document.getElementById('live-stars').textContent = stars.toLocaleString();
-          document.getElementById('live-forks').textContent = forks.toLocaleString();
-          document.getElementById('cta-stars').textContent = stars.toLocaleString();
-          document.getElementById('cta-forks').textContent = forks.toLocaleString();
-        } else {
-          throw new Error('API unavailable');
+          stats.stars = repo.stargazers_count.toLocaleString();
+          stats.forks = repo.forks_count.toLocaleString();
         }
-      } catch (_) {
-        document.getElementById('live-stars').textContent = '300+';
-        document.getElementById('live-forks').textContent = '45+';
-        document.getElementById('cta-stars').textContent = '300+';
-        document.getElementById('cta-forks').textContent = '45+';
-      }
+      } catch (_) {}
 
-      // Version from package.json
       try {
         const pkgResp = await fetch(`https://raw.githubusercontent.com/${REPO}/main/package.json`);
         if (pkgResp.ok) {
           const pkg = await pkgResp.json();
-          const ver = pkg.version || '4.0.0';
-          document.getElementById('live-version').textContent = 'v' + ver;
-          document.getElementById('hero-version').textContent = 'v' + ver;
+          stats.version = 'v' + (pkg.version || '4.0');
         }
-      } catch (_) {
-        document.getElementById('live-version').textContent = 'v4.0';
-      }
+      } catch (_) {}
 
-      // Contributors count
       try {
         const resp = await fetch(`https://api.github.com/repos/${REPO}/contributors?per_page=1&anon=true`);
         const link = resp.headers.get('Link');
         let count = 0;
-        if (link) {
-          const match = link.match(/[?&]page=(\d+)>; rel="last"/);
-          if (match) count = parseInt(match[1], 10);
-        }
-        document.getElementById('cta-contributors').textContent = count > 0 ? count.toLocaleString() : '45+';
-      } catch (_) {
-        document.getElementById('cta-contributors').textContent = '45+';
+        if (link) { const m = link.match(/[?&]page=(\d+)>; rel="last"/); if (m) count = parseInt(m[1], 10); }
+        stats.contributors = count > 0 ? count.toLocaleString() : '45+';
+      } catch (_) {}
+
+      // Apply fresh stats and cache
+      if (stats.stars || stats.version) {
+        applyStats(stats);
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(stats)); } catch (_) {}
+      } else if (!cached) {
+        // No cache, no network — show fallbacks
+        applyStats({ stars: '300+', forks: '45+', version: 'v4.0', contributors: '45+' });
       }
 
       // ── Live Article Preview ──

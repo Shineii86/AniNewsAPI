@@ -4,6 +4,16 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [4.0.6] - 2026-05-08
+
+### Added
+- **`CONTRIBUTING.md`**: Complete guide covering bug reports, feature requests, code contributions, how to add a new news source (with code template), commit conventions, testing, and project structure.
+- **PWA manifest** (`/manifest.json`): Installable as a standalone app with branded icon, dark theme, and "developer" + "news" categories.
+- **Custom OG image** (`/og-image.png`): Branded 1200×630 image with logo, title, subtitle, and stat pills — replaces GitHub's auto-generated card.
+- **GitHub stats localStorage cache**: Stats are cached for 30 minutes. Cached values render instantly, then refresh in background. Eliminates redundant GitHub API calls on repeat visits.
+
+---
+
 ## [4.0.5] - 2026-05-08
 
 ### Fixed

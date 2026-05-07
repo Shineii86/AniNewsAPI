@@ -1,0 +1,20 @@
+{
+  "name": "AniNewsAPI",
+  "short_name": "AniNews",
+  "description": "Real-time Anime News Aggregation API",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%238b5cf6'/%3E%3Cpath d='M128 416h256a32 32 0 0 0 32-32V128a32 32 0 0 0-32-32H192a32 32 0 0 0-32 32v288a32 32 0 0 1-32 32Zm0 0a32 32 0 0 1-32-32V256c0-17.7 14.3-32 32-32h32' fill='none' stroke='white' stroke-width='28' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M320 256H192' stroke='white' stroke-width='28' stroke-linecap='round'/%3E%3Cpath d='M288 352H192' stroke='white' stroke-width='28' stroke-linecap='round'/%3E%3Cpath d='M256 160h96v64h-96z' fill='white'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["developer", "news"],
+  "lang": "en",
+  "orientation": "any"
+}

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0f"/>
+      <stop offset="100%" style="stop-color:#161622"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a78bfa"/>
+      <stop offset="100%" style="stop-color:#ec4899"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- Top accent bar -->
+  <rect width="1200" height="4" fill="url(#accent)"/>
+  <!-- Logo icon -->
+  <g transform="translate(80, 240)">
+    <rect width="80" height="80" rx="14" fill="url(#accent)"/>
+    <path d="M20 65h40a8 8 0 0 0 8-8V25a8 8 0 0 0-8-8H35a8 8 0 0 0-8 8v40a8 8 0 0 1-8 8Z" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M48 42H28" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    <path d="M42 55H28" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    <path d="M38 28h24v16H38z" fill="white"/>
+  </g>
+  <!-- Title -->
+  <text x="185" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="700" fill="white" letter-spacing="-2">AniNewsAPI</text>
+  <!-- Subtitle -->
+  <text x="80" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#94a3b8">Real-time Anime News Aggregation API</text>
+  <!-- Stats pills -->
+  <g transform="translate(80, 410)">
+    <rect width="140" height="44" rx="22" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+    <text x="70" y="28" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#a78bfa" text-anchor="middle">7 Sources</text>
+  </g>
+  <g transform="translate(240, 410)">
+    <rect width="160" height="44" rx="22" fill="rgba(236,72,153,0.15)" stroke="rgba(236,72,153,0.3)" stroke-width="1"/>
+    <text x="80" y="28" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#ec4899" text-anchor="middle">11 Endpoints</text>
+  </g>
+  <g transform="translate(420, 410)">
+    <rect width="160" height="44" rx="22" fill="rgba(6,182,212,0.15)" stroke="rgba(6,182,212,0.3)" stroke-width="1"/>
+    <text x="80" y="28" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#06b6d4" text-anchor="middle">60+ Articles</text>
+  </g>
+  <!-- URL -->
+  <text x="80" y="540" font-family="monospace, monospace" font-size="20" fill="#64748b">aninews.vercel.app</text>
+</svg>
