@@ -4,6 +4,14 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [4.0.1] - 2026-05-08
+
+### Changed
+- **README At a Glance**: Replaced box-drawing table with card-based layout showing all key metrics (sources, endpoints, cache, articles, search, SSE, OpenAPI)
+- **README Architecture**: Replaced flat flowchart with layered diagram showing rate limiting, all 11 endpoints, 7 sources with scrape methods, and data flow pipeline
+
+---
+
 ## [4.0.0] - 2026-05-08
 
 ### Added
