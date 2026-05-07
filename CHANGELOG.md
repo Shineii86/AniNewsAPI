@@ -4,6 +4,15 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [3.1.2] - 2026-05-08
+
+### Changed
+- **Replaced all emoji icons with proper SVG icons**: Logo marks (header, footer, favicon) now use inline SVG newspaper icon instead of 📰 emoji
+- **Live GitHub Stats**: Stats ribbon now shows real-time stars, forks from GitHub API; hero badge shows live version from `package.json`
+- **Live CTA Stats**: GitHub section now fetches and displays live stars, forks, and contributor count via GitHub API
+
+---
+
 ## [3.1.1] - 2026-05-08
 
 ### Added

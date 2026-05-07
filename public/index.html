@@ -10,9 +10,9 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://aninews.vercel.app">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
+  <!-- Favicon (SVG newspaper icon) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2'/%3E%3Cpath d='M18 14h-8'/%3E%3Cpath d='M15 18h-5'/%3E%3Cpath d='M10 6h8v4h-8V6Z'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2'/%3E%3Cpath d='M18 14h-8'/%3E%3Cpath d='M15 18h-5'/%3E%3Cpath d='M10 6h8v4h-8V6Z'/%3E%3C/svg%3E">
   <meta name="theme-color" content="#0a0a0f">
 
   <!-- Open Graph / Facebook -->
@@ -991,7 +991,9 @@
   <header>
     <div class="container header-inner">
       <a href="#" class="logo">
-        <div class="logo-mark">📰</div>
+        <div class="logo-mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+        </div>
         <div class="logo-text"><span>AniNews</span>API</div>
       </a>
       <button class="mobile-toggle" onclick="document.querySelector('nav').classList.toggle('open')" aria-label="Toggle menu">
@@ -1011,7 +1013,7 @@
     <div class="container">
       <div class="hero-badge">
         <span class="dot"></span>
-        v3.0.0 — 7 sources, 60+ articles
+        <span id="hero-version">v3.0.0</span> — 7 sources, 60+ articles
       </div>
 
       <h1>
@@ -1059,20 +1061,20 @@
     <div class="container">
       <div class="stats-grid">
         <div class="stat-cell">
-          <div class="stat-number violet">~200ms</div>
-          <div class="stat-label">Cached Response</div>
+          <div class="stat-number violet" id="live-stars">—</div>
+          <div class="stat-label">GitHub Stars</div>
         </div>
         <div class="stat-cell">
-          <div class="stat-number pink">99.9%</div>
-          <div class="stat-label">Uptime</div>
+          <div class="stat-number pink" id="live-forks">—</div>
+          <div class="stat-label">Forks</div>
         </div>
         <div class="stat-cell">
-          <div class="stat-number cyan">7</div>
+          <div class="stat-number cyan" id="live-version">—</div>
+          <div class="stat-label">Version</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-number emerald">7</div>
           <div class="stat-label">Sources</div>
-        </div>
-        <div class="stat-cell">
-          <div class="stat-number emerald">60+</div>
-          <div class="stat-label">Articles</div>
         </div>
       </div>
     </div>
@@ -1313,8 +1315,9 @@
           <i class="fab fa-github"></i> View on GitHub
         </a>
         <div class="cta-meta">
-          <span><i class="fas fa-star"></i> 300+ stars</span>
-          <span><i class="fas fa-code-branch"></i> 45 contributors</span>
+          <span><i class="fas fa-star"></i> <span id="cta-stars">—</span> stars</span>
+          <span><i class="fas fa-code-branch"></i> <span id="cta-forks">—</span> forks</span>
+          <span><i class="fas fa-users"></i> <span id="cta-contributors">—</span> contributors</span>
           <span><i class="fas fa-balance-scale"></i> MIT Licensed</span>
         </div>
       </div>
@@ -1325,7 +1328,9 @@
   <footer>
     <div class="container footer-inner">
       <div class="footer-brand">
-        <div class="logo-mark">📰</div>
+        <div class="logo-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+        </div>
         <span>AniNewsAPI</span>
       </div>
       <div class="footer-copy">&copy; 2025 Shinei Nouzen &middot; All Rights Reserved</div>
@@ -1343,6 +1348,64 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+  <!-- Live GitHub Stats -->
+  <script>
+    (async function() {
+      const REPO = 'Shineii86/AniNewsAPI';
+      const api = (endpoint) => fetch(`https://api.github.com/${endpoint}`, {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      }).then(r => r.ok ? r.json() : null).catch(() => null);
+
+      const repo = await api(`repos/${REPO}`);
+      if (repo) {
+        const stars = repo.stargazers_count;
+        const forks = repo.forks_count;
+
+        // Stats ribbon
+        const elStars = document.getElementById('live-stars');
+        const elForks = document.getElementById('live-forks');
+        if (elStars) elStars.textContent = stars.toLocaleString();
+        if (elForks) elForks.textContent = forks.toLocaleString();
+
+        // Hero badge
+        // CTA section
+        const ctaStars = document.getElementById('cta-stars');
+        const ctaForks = document.getElementById('cta-forks');
+        if (ctaStars) ctaStars.textContent = stars.toLocaleString();
+        if (ctaForks) ctaForks.textContent = forks.toLocaleString();
+      }
+
+      // Fetch version from package.json
+      try {
+        const pkgResp = await fetch(`https://raw.githubusercontent.com/${REPO}/main/package.json`);
+        if (pkgResp.ok) {
+          const pkg = await pkgResp.json();
+          const ver = pkg.version || '3.0.0';
+          const elVersion = document.getElementById('live-version');
+          const heroVer = document.getElementById('hero-version');
+          if (elVersion) elVersion.textContent = 'v' + ver;
+          if (heroVer) heroVer.textContent = 'v' + ver;
+        }
+      } catch (_) {}
+
+      // Fetch contributors count
+      const contribs = await api(`repos/${REPO}/contributors?per_page=1&anon=true`);
+      if (contribs) {
+        // GitHub returns array; to get total count we check Link header, but simpler: fetch first page
+        // Use a separate request to get total
+        const resp = await fetch(`https://api.github.com/repos/${REPO}/contributors?per_page=1&anon=true`);
+        const link = resp.headers.get('Link');
+        let count = Array.isArray(contribs) ? contribs.length : 0;
+        if (link) {
+          const match = link.match(/[?&]page=(\d+)>; rel="last"/);
+          if (match) count = parseInt(match[1], 10);
+        }
+        const el = document.getElementById('cta-contributors');
+        if (el) el.textContent = count.toLocaleString();
+      }
+    })();
   </script>
 </body>
 </html>
