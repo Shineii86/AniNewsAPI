@@ -4,6 +4,13 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [3.1.1] - 2026-05-08
+
+### Added
+- **README Notice**: Added deprecation notice for old URL `https://aninewsapi.vercel.app/` — no longer accessible, directing users to current `https://aninews.vercel.app/`
+
+---
+
 ## [3.1.0] - 2026-05-08
 
 ### Changed

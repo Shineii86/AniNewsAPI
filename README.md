@@ -17,6 +17,8 @@
 [![Stars](https://img.shields.io/github/stars/Shineii86/AniNewsAPI?style=for-the-badge)](https://github.com/Shineii86/AniNewsAPI/stargazers)
 [![Forks](https://img.shields.io/github/forks/Shineii86/AniNewsAPI?style=for-the-badge)](https://github.com/Shineii86/AniNewsAPI/fork)
 
+> ⚠️ **Note:** The old deployment URL `https://aninewsapi.vercel.app/` is no longer accessible. Use the current URL: **https://aninews.vercel.app/**
+
 > A serverless API aggregating anime news from **7 sources** in real-time — with smart caching, keyword search, RSS feeds, and full-article extraction.
 
 <br>
