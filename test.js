@@ -2,7 +2,7 @@ const axios = require('axios');
 const BASE_URL = process.env.API_URL || 'http://localhost:3000';
 
 async function run() {
-  console.log(`\n🧪 AniNewsAPI v3.0.0 Tests\n${'═'.repeat(50)}\n`);
+  console.log(`\n🧪 AniNewsAPI v3.1.3 Tests\n${'═'.repeat(50)}\n`);
   let passed = 0, failed = 0;
 
   async function test(name, url, validate) {
@@ -15,7 +15,7 @@ async function run() {
     } catch (e) { console.log(`❌ ${e.response?.status || e.message}`); failed++; }
   }
 
-  await test('Health', `${BASE_URL}/api/health`, r => r.data.version === '3.0.0' ? true : 'version mismatch');
+  await test('Health', `${BASE_URL}/api/health`, r => r.data.version === '3.1.3' ? true : 'version mismatch');
   await test('Stats', `${BASE_URL}/api/stats`, r => r.data.success ? true : 'not successful');
   await test('News (all)', `${BASE_URL}/api/news?limit=3&refresh=true`, r => r.data.data.length > 0 ? true : 'no articles');
   for (const s of ['ann', 'crunchyroll', 'myanimelist', 'animecorner', 'otakuusa', 'animeherald', 'comicbook']) {

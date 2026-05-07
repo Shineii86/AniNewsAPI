@@ -9,7 +9,7 @@
 **Real-time Anime News Aggregation API**
 
 ![Vercel](https://img.shields.io/badge/Deployed%20On-Vercel-black?logo=vercel&style=flat-square)
-![Version](https://img.shields.io/badge/Version-3.0.0-89b4fa?style=flat-square&labelColor=1e1e2e)
+![Version](https://img.shields.io/badge/Version-3.1.3-89b4fa?style=flat-square&labelColor=1e1e2e)
 ![Node](https://img.shields.io/badge/Node.js-≥18-339933?logo=node.js&style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
 ![Sources](https://img.shields.io/badge/Sources-7-f5c2e7?style=flat-square&labelColor=1e1e2e)
@@ -35,9 +35,9 @@
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    AniNewsAPI v3.0.0                     │
+│                    AniNewsAPI v3.1.3                     │
 ├──────────────┬──────────────┬───────────────────────────┤
-│  7 Sources   │  8 Endpoints │  ~200ms cached response   │
+│  7 Sources   │  9 Endpoints │  ~200ms cached response   │
 │  60+ Articles│  RSS 2.0     │  10-min auto-refresh      │
 │  Search      │  Pagination  │  Cross-source dedup       │
 └──────────────┴──────────────┴───────────────────────────┘
@@ -115,36 +115,36 @@
 ## 🏗️ Architecture
 
 ```
-                    ┌──────────────────┐
-                    │   Client Request  │
-                    └────────┬─────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │   Vercel Edge /   │
-                    │   Express Server  │
-                    └────────┬─────────┘
-                             │
-              ┌──────────────┼──────────────┐
-              │              │              │
-     ┌────────▼───┐  ┌──────▼──────┐  ┌───▼────────┐
-     │  /api/news │  │ /api/search │  │  /api/rss  │
-     │  /api/tags │  │  /api/slug  │  │ /api/stats │
-     └────────┬───┘  └──────┬──────┘  └───┬────────┘
-              │             │              │
-              └─────────────┼──────────────┘
-                            │
-                   ┌────────▼─────────┐
-                   │   Cache Layer    │
-                   │  (node-cache)    │
-                   │  TTL: 10 min     │
-                   └────────┬─────────┘
-                            │ (on miss)
-              ┌─────────────┼─────────────┐
-              │             │             │
-     ┌────────▼───┐ ┌──────▼──────┐ ┌───▼────────┐
-     │    ANN     │ │ Crunchyroll │ │    MAL     │  ... (7 total)
-     │ Google News│ │ Google News │ │   Direct   │
-     └────────────┘ └─────────────┘ └────────────┘
+                         ┌──────────────────┐
+                         │   Client Request  │
+                         └────────┬─────────┘
+                                  │
+                         ┌────────▼─────────┐
+                         │   Vercel Edge /   │
+                         │   Express Server  │
+                         └────────┬─────────┘
+                                  │
+           ┌──────────┬───────────┼───────────┬──────────┐
+           │          │           │           │          │
+  ┌────────▼───┐ ┌────▼─────┐ ┌──▼───────┐ ┌─▼────────┐ ┌▼──────────┐
+  │  /api/news │ │ /search  │ │ /api/rss │ │ /health  │ │/cache/clear│
+  │  /api/tags │ │ /api/slug│ │ /stats   │ │          │ │  (POST)   │
+  └────────┬───┘ └────┬─────┘ └──┬───────┘ └──────────┘ └───────────┘
+           │          │          │
+           └──────────┼──────────┘
+                      │
+             ┌────────▼─────────┐
+             │   Cache Layer    │
+             │  (node-cache)    │
+             │  TTL: 10 min     │
+             └────────┬─────────┘
+                      │ (on miss)
+        ┌─────────────┼─────────────┐
+        │             │             │
+  ┌─────▼─────┐ ┌────▼──────┐ ┌───▼────────┐
+  │    ANN    │ │Crunchyroll│ │    MAL     │  ... (7 total)
+  │Google News│ │Google News│ │   Direct   │
+  └───────────┘ └───────────┘ └────────────┘
 ```
 
 **Data Flow:** Request → Cache Check → Fetch Sources → Deduplicate → Enrich → Cache → Respond

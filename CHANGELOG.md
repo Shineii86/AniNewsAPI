@@ -4,6 +4,15 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [3.1.4] - 2026-05-08
+
+### Fixed
+- **README "At a Glance"**: Updated version from 3.0.0 to 3.1.3, corrected endpoint count from 8 to 9
+- **README Architecture diagram**: Added missing `/api/health` and `/api/cache/clear` endpoints to the data flow diagram
+- **Version consistency**: Bumped version to 3.1.3 across `package.json`, `utils/constants.js`, and `test.js`
+
+---
+
 ## [3.1.3] - 2026-05-08
 
 ### Fixed
