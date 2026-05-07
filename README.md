@@ -1,179 +1,243 @@
-# 📰 Anime News API
+<div align="center">
 
-![Vercel](https://img.shields.io/badge/Deployed%20On-Vercel-black?logo=vercel)
-![Version](https://img.shields.io/badge/Version-2.0.0-blue)
-![Scraping](https://img.shields.io/badge/Scraper-Cheerio-yellow?logo=javascript)
-![Status](https://img.shields.io/badge/API-Stable-green)
-![License](https://img.shields.io/badge/License-MIT-blue)
+# 📰 AniNewsAPI
 
+**Real-time Anime News Aggregation API**
+
+![Vercel](https://img.shields.io/badge/Deployed%20On-Vercel-black?logo=vercel&style=flat-square)
+![Version](https://img.shields.io/badge/Version-3.0.0-89b4fa?style=flat-square&labelColor=1e1e2e)
+![Node](https://img.shields.io/badge/Node.js-≥18-339933?logo=node.js&style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
+![Sources](https://img.shields.io/badge/Sources-7-f5c2e7?style=flat-square&labelColor=1e1e2e)
+![Status](https://img.shields.io/badge/API-Stable-a6e3a1?style=flat-square&labelColor=1e1e2e)
+
+[![API Status](https://img.shields.io/website?down_color=f38ba8&down_message=offline&label=API&style=for-the-badge&up_color=a6e3a1&up_message=online&url=https%3A%2F%2Faninewsapi.vercel.app)](https://aninewsapi.vercel.app)
 ![Last Commit](https://img.shields.io/github/last-commit/Shineii86/AniNewsAPI?style=for-the-badge)
-![Repo Size](https://img.shields.io/github/repo-size/Shineii86/AniNewsAPI?style=for-the-badge) [![GitHub Stars](https://img.shields.io/github/stars/Shineii86/AniNewsAPI?style=for-the-badge)](https://github.com/Shineii86/AniNewsAPI/stargazers) [![GitHub Forks](https://img.shields.io/github/forks/Shineii86/AniNewsAPI?style=for-the-badge)](https://github.com/Shineii86/AniNewsAPI/fork)
-[![API Status](https://img.shields.io/website?down_color=lightgrey&down_message=offline&label=API%20Status&style=for-the-badge&up_color=green&up_message=online&url=https%3A%2F%2Faninews.vercel.app)](https://aninews.vercel.app)
+![Repo Size](https://img.shields.io/github/repo-size/Shineii86/AniNewsAPI?style=for-the-badge)
+[![Stars](https://img.shields.io/github/stars/Shineii86/AniNewsAPI?style=for-the-badge)](https://github.com/Shineii86/AniNewsAPI/stargazers)
+[![Forks](https://img.shields.io/github/forks/Shineii86/AniNewsAPI?style=for-the-badge)](https://github.com/Shineii86/AniNewsAPI/fork)
 
-> 🛰️ A powerful, real-time anime news API that aggregates fresh articles from 7+ reliable sources with intelligent caching and advanced date parsing.
+> A serverless API aggregating anime news from **7 sources** in real-time — with smart caching, keyword search, RSS feeds, and full-article extraction.
 
----
+<br>
 
-## ✨ What's New in v2.0.0
+[🚀 Quick Start](#-quick-start) · [📡 API Docs](#-api-endpoints) · [🗞️ Sources](#️-news-sources) · [🏗️ Architecture](#️-architecture) · [🤝 Contributing](#-contributing)
 
-- 🆕 **2 New Sources**: Added Anime Herald and Comic Book
-- 🔧 **Fixed Date Parsing**: Properly handles all date formats including relative times ("2 hours ago")
-- 🚀 **Better Performance**: Improved concurrent fetching with retry logic
-- 📡 **RSS Fallback**: All sources now have RSS fallback when web scraping fails
-- 🏥 **Health Check**: New `/api/health` endpoint for monitoring
-- 📊 **Statistics**: New `/api/stats` endpoint for cache metrics
-- 🔄 **Force Refresh**: New `refresh=true` parameter to bypass cache
+</div>
 
 ---
 
-## 📦 Features
+## 📊 At a Glance
 
-- ⚡ **Real-time Scraping** from 7+ sources
-- 🔁 **Smart Caching** with auto-refresh (10 minutes)
-- 🏷️ **Tag Filtering** across all sources
-- 📄 **Full Article Content** by slug
-- 📡 **RSS Fallback** for reliability
-- 🚀 **Concurrent Fetching** with retry logic
-- 📅 **Advanced Date Parsing** (handles "X hours ago", "Yesterday", etc.)
-- 🏥 **Health Monitoring** endpoint
-- 📊 **Cache Statistics** endpoint
+```
+┌─────────────────────────────────────────────────────────┐
+│                    AniNewsAPI v3.0.0                     │
+├──────────────┬──────────────┬───────────────────────────┤
+│  7 Sources   │  8 Endpoints │  ~200ms cached response   │
+│  60+ Articles│  RSS 2.0     │  10-min auto-refresh      │
+│  Search      │  Pagination  │  Cross-source dedup       │
+└──────────────┴──────────────┴───────────────────────────┘
+```
 
 ---
 
-## 🗞️ News Sources (7 Total)
+## ✨ Features
 
-| Source | Description | Type | Status |
-|--------|-------------|------|--------|
-| **Anime News Network** | Industry-leading anime news | Official | ✅ Active |
-| **Anime Corner** | Community-driven anime news | Community | ✅ Active |
-| **MyAnimeList** | Popular anime database news | Official | ✅ Active |
-| **Otaku USA Magazine** | Anime culture magazine | Community | ✅ Active |
-| **Crunchyroll** | Official streaming news | Official | ✅ Active |
-| **Anime Herald** | Anime news and reviews | Community | 🆕 New |
-| **Comic Book** | Anime and manga coverage | Community | 🆕 New |
+<table>
+<tr>
+<td width="50%">
+
+### ⚡ Core
+- **Real-time scraping** from 7 anime news sources
+- **Smart caching** with 10-minute TTL + disk backup
+- **Concurrent fetching** — all sources hit simultaneously
+- **Retry logic** — 3 attempts per source with exponential backoff
+- **Graceful degradation** — if a source fails, others continue
+
+</td>
+<td width="50%">
+
+### 🔍 Data
+- **Keyword search** with relevance scoring (`/api/search`)
+- **RSS 2.0 feed** for readers & integrations (`/api/rss`)
+- **Full article extraction** by slug (`/api/news/:slug`)
+- **Tag filtering** with article counts (`/api/news/tags`)
+- **Pagination** via `offset` + `limit` parameters
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🛡️ Reliability
+- **RSS fallback** when web scraping is blocked
+- **Google News proxy** for Cloudflare-protected sources
+- **Cross-source deduplication** by normalized title
+- **Timeout protection** — 15s per source, never hangs
+- **CORS enabled** — works from any frontend
+
+</td>
+<td width="50%">
+
+### 🚀 Deployment
+- **Zero-config** Vercel deployment
+- **Serverless functions** — scales automatically
+- **Express mode** — run standalone with `npm start`
+- **Environment variables** for TTL customization
+- **~50KB** total codebase, no heavy dependencies
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🗞️ News Sources
+
+| Source | Key | Method | Articles |
+|--------|-----|--------|----------|
+| [**Anime News Network**](https://www.animenewsnetwork.com/) | `ann` | Google News RSS | ~15 |
+| [**Anime Corner**](https://animecorner.me/) | `animecorner` | Direct Scraping | ~12 |
+| [**MyAnimeList**](https://myanimelist.net/) | `myanimelist` | Direct Scraping | ~15 |
+| [**Otaku USA Magazine**](https://otakuusamagazine.com/) | `otakuusa` | Google News RSS | ~12 |
+| [**Crunchyroll**](https://www.crunchyroll.com/news) | `crunchyroll` | Google News RSS | ~15 |
+| [**Anime Herald**](https://www.animeherald.com/) | `animeherald` | RSS Feed | ~10 |
+| [**Comic Book**](https://comicbook.com/anime/) | `comicbook` | Direct Scraping | ~10 |
+
+> **Total: 60+ unique articles** after cross-source deduplication
+
+---
+
+## 🏗️ Architecture
+
+```
+                    ┌──────────────────┐
+                    │   Client Request  │
+                    └────────┬─────────┘
+                             │
+                    ┌────────▼─────────┐
+                    │   Vercel Edge /   │
+                    │   Express Server  │
+                    └────────┬─────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+     ┌────────▼───┐  ┌──────▼──────┐  ┌───▼────────┐
+     │  /api/news │  │ /api/search │  │  /api/rss  │
+     │  /api/tags │  │  /api/slug  │  │ /api/stats │
+     └────────┬───┘  └──────┬──────┘  └───┬────────┘
+              │             │              │
+              └─────────────┼──────────────┘
+                            │
+                   ┌────────▼─────────┐
+                   │   Cache Layer    │
+                   │  (node-cache)    │
+                   │  TTL: 10 min     │
+                   └────────┬─────────┘
+                            │ (on miss)
+              ┌─────────────┼─────────────┐
+              │             │             │
+     ┌────────▼───┐ ┌──────▼──────┐ ┌───▼────────┐
+     │    ANN     │ │ Crunchyroll │ │    MAL     │  ... (7 total)
+     │ Google News│ │ Google News │ │   Direct   │
+     └────────────┘ └─────────────┘ └────────────┘
+```
+
+**Data Flow:** Request → Cache Check → Fetch Sources → Deduplicate → Enrich → Cache → Respond
 
 ---
 
 ## 📡 API Endpoints
 
-### `GET /api/news` 
+### `GET /api/news`
 
-Returns the latest anime news articles from all sources.
-
-#### Query Parameters:
+Latest anime news from all or specific sources.
 
 | Param | Type | Default | Description |
 |-------|------|---------|-------------|
-| `limit` | Number | `20` | Max articles (1-100) |
-| `sort` | String | `latest` | `latest` or `oldest` |
-| `source` | String | `all` | Filter by source (see below) |
-| `refresh` | Boolean | `false` | Force cache refresh |
+| `limit` | `1-100` | `20` | Max articles |
+| `offset` | `≥0` | `0` | Pagination offset |
+| `sort` | `latest\|oldest` | `latest` | Sort order |
+| `source` | `string` | `all` | Filter by source key |
+| `refresh` | `boolean` | `false` | Bypass cache |
 
-#### Available Sources:
-- `all` - All sources (default)
-- `ann` - Anime News Network
-- `animecorner` - Anime Corner
-- `myanimelist` - MyAnimeList
-- `otakuusa` - Otaku USA Magazine
-- `crunchyroll` - Crunchyroll
-- `animeherald` - Anime Herald
-- `comicbook` - Comic Book
+```bash
+curl "https://aninewsapi.vercel.app/api/news?limit=10"
+curl "https://aninewsapi.vercel.app/api/news?source=crunchyroll&limit=10&offset=10"
+```
 
-#### Example Response:
+<details>
+<summary>📄 Example Response</summary>
+
 ```json
 {
   "success": true,
-  "data": [
-    {
-      "title": "New Anime Series Announced for 2026",
-      "slug": "ann-new-anime-series-announced-for-2026",
-      "source": "Anime News Network",
-      "excerpt": "A new anime series has been announced...",
-      "date": "2026-04-13T10:30:00.000Z",
-      "image": "https://example.com/image.jpg",
-      "link": "https://www.animenewsnetwork.com/news/...",
-      "tags": ["news", "anime", "2026"]
-    }
-  ],
-  "meta": {
-    "total": 20,
-    "source": "all",
-    "sort": "latest",
-    "limit": 20,
-    "responseTime": "245ms",
-    "timestamp": "2026-04-13T10:30:00.000Z",
-    "availableSources": ["all", "ann", "animecorner", "myanimelist", "otakuusa", "crunchyroll", "animeherald", "comicbook"]
-  }
+  "data": [{ "title": "Demon Slayer Season 4 Announced", "slug": "ann-demon-slayer-season-4-announced", "source": "Anime News Network", "excerpt": "...", "date": "2026-05-07T10:30:00.000Z", "image": "...", "link": "...", "tags": ["news", "anime"] }],
+  "meta": { "total": 62, "returned": 10, "offset": 0, "limit": 10, "hasMore": true, "source": "all", "sort": "latest", "responseTime": "234ms" }
 }
 ```
+</details>
 
-#### Example Requests:
-```http
-GET /api/news?limit=10&sort=latest
-GET /api/news?source=ann&limit=5
-GET /api/news?source=myanimelist&refresh=true
-GET /api/news?limit=50&sort=oldest
+---
+
+### `GET /api/search`
+
+Full-text search with relevance scoring. Title matches rank higher than excerpt matches.
+
+| Param | Required | Description |
+|-------|----------|-------------|
+| `q` | ✅ | Search query (min 2 chars) |
+| `source` | ❌ | Filter by source |
+| `limit` | ❌ | Max results |
+| `offset` | ❌ | Pagination |
+
+```bash
+curl "https://aninewsapi.vercel.app/api/search?q=demon+slayer"
+curl "https://aninewsapi.vercel.app/api/search?q=manga&source=ann&limit=5"
 ```
 
 ---
 
 ### `GET /api/news/tags`
 
-Filter articles by tags or get available tags.
+List available tags with counts, or filter articles by tag.
 
-#### Query Parameters:
-
-| Param | Type | Required | Description |
-|-------|------|----------|-------------|
-| `tag` | String | No | Tag to filter by |
-| `source` | String | No | Source filter |
-
-#### Examples:
-```http
-GET /api/news/tags                    # Get all available tags
-GET /api/news/tags?tag=official       # Filter by 'official' tag
-GET /api/news/tags?tag=news&source=ann # Filter by tag and source
+```bash
+curl "https://aninewsapi.vercel.app/api/news/tags"
+curl "https://aninewsapi.vercel.app/api/news/tags?tag=official"
 ```
 
 ---
 
 ### `GET /api/news/:slug`
 
-Get full article content by slug.
+Full article content extraction.
 
-#### Example:
-```http
-GET /api/news/ann-new-anime-series-announced-for-2026
+```bash
+curl "https://aninewsapi.vercel.app/api/news/ann-demon-slayer-season-4-announced"
 ```
 
 ---
 
-### `GET /api/health`
+### `GET /api/rss`
 
-Health check and system status.
+Standard RSS 2.0 XML feed. Works with any feed reader.
 
-#### Example Response:
-```json
-{
-  "success": true,
-  "status": "healthy",
-  "uptime": 3600,
-  "timestamp": "2026-04-13T10:30:00.000Z",
-  "cache": {
-    "hits": 150,
-    "misses": 25,
-    "keys": ["news_all", "news_ann"],
-    "ttl": 600
-  },
-  "version": "2.0.0"
-}
+| Param | Default | Description |
+|-------|---------|-------------|
+| `source` | `all` | Filter by source |
+| `limit` | `20` | Max items |
+
+```bash
+curl "https://aninewsapi.vercel.app/api/rss"
+curl "https://aninewsapi.vercel.app/api/rss?source=crunchyroll&limit=10"
 ```
 
 ---
 
-### `GET /api/stats`
+### `GET /api/health` · `GET /api/stats` · `POST /api/cache/clear`
 
-Cache statistics and performance metrics.
+Health check, cache statistics, and manual cache flush.
 
 ---
 
@@ -186,139 +250,114 @@ Cache statistics and performance metrics.
 ### Local Development
 
 ```bash
-# Clone the repository
 git clone https://github.com/Shineii86/AniNewsAPI.git
-cd AniNewsAPI
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# API will be available at http://localhost:3000
+cd AniNewsAPI && npm install && npm run dev
+# → http://localhost:3000
 ```
 
 ---
 
 ## 🔧 Configuration
 
-### Environment Variables
-
-```env
-# Optional: Set cache duration (in seconds)
-CACHE_TTL=600
-
-# Optional: Set Chrome executable path for Puppeteer
-CHROME_EXECUTABLE_PATH=/usr/bin/chromium-browser
-```
-
-### Caching Strategy
-
-- **Memory Cache**: Fast in-memory storage (10 minutes TTL)
-- **File Cache**: Persistent disk storage for backup
-- **Auto-refresh**: Cache automatically refreshes on expiry
-- **Force Refresh**: Use `?refresh=true` to bypass cache
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `CACHE_TTL` | `600` | Cache duration in seconds |
+| `PORT` | `3000` | Server port (Express mode) |
 
 ---
 
 ## 📊 Performance
 
-- **Response Time**: ~200-500ms (cached)
-- **Concurrent Sources**: 7 sources fetched simultaneously
-- **Cache Duration**: 10 minutes
-- **Retry Logic**: 3 attempts per source with exponential backoff
-- **Timeout**: 15 seconds per source
+| Metric | Value |
+|--------|-------|
+| Cached response | ~200ms |
+| Fresh fetch (all 7) | ~3-6s |
+| Cache TTL | 10 minutes |
+| Retry attempts | 3 per source |
+| Timeout per source | 15 seconds |
+| Total articles (avg) | 60+ after dedup |
 
 ---
 
-## 🛠️ Technical Details
+## 🛠️ Tech Stack
 
-### Architecture
-- **Runtime**: Node.js (Vercel Functions / Express)
-- **Scraping**: Cheerio + Axios + RSS Parser
-- **Caching**: Node-cache + File system
-- **Deployment**: Vercel Serverless / Express Server
+| Layer | Technology |
+|-------|------------|
+| **Runtime** | Node.js ≥ 18 |
+| **HTTP** | Express 5 / Vercel Functions |
+| **Scraping** | Cheerio + Axios |
+| **RSS** | rss-parser |
+| **Caching** | node-cache + filesystem |
 
-### Error Handling
-- Graceful fallback when sources fail
-- RSS fallback for all sources
-- Detailed error logging
-- Structured error responses
-- Timeout protection (15s per source)
+---
+
+## 📁 Project Structure
+
+```
+AniNewsAPI/
+├── api/                    # Vercel serverless functions
+│   ├── cache/clear.js      # Cache management
+│   ├── health.js           # Health check
+│   ├── news.js             # Main news endpoint
+│   ├── news/{slug}.js      # Article by slug
+│   ├── news/tags.js        # Tag filtering
+│   ├── rss.js              # RSS feed
+│   ├── search.js           # Keyword search
+│   └── stats.js            # Cache statistics
+├── utils/                  # Core logic
+│   ├── cacheHandler.js     # Memory + disk cache
+│   ├── constants.js        # Shared config
+│   ├── contentParser.js    # Article extraction
+│   ├── dateParser.js       # Multi-format date parsing
+│   ├── fetch*.js           # Source scrapers (7 files)
+│   └── generateSlug.js     # URL-safe slug generator
+├── public/index.html       # Landing page
+├── server.js               # Express server entry
+├── vercel.json             # Vercel routing config
+└── CHANGELOG.md
+```
 
 ---
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Add a New Source
 
-### Adding New Sources
-
-To add a new anime news source:
-
-1. Create a new scraper in `utils/fetchNewSource.js`
-2. Follow the existing pattern for data structure
-3. Add the source to `api/news.js` SOURCES object
-4. Update the README documentation
-5. Test thoroughly
+1. Create `utils/fetchNewSource.js` — export async function returning `[{ title, slug, source, excerpt, date, image, link, tags }]`
+2. Register in `api/news.js` → `SOURCES` object
+3. Test with `npm test`, submit a PR
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+[MIT](LICENSE) © [Shinei Nouzen](https://github.com/Shineii86)
 
 ---
 
 ## 🙏 Acknowledgments
 
-- [Anime News Network](https://www.animenewsnetwork.com/)
-- [Anime Corner](https://animecorner.me/)
-- [MyAnimeList](https://myanimelist.net/)
-- [Otaku USA Magazine](https://otakuusamagazine.com/)
-- [Crunchyroll](https://www.crunchyroll.com/)
-- [Anime Herald](https://www.animeherald.com/)
-- [Comic Book](https://comicbook.com/anime/)
+| Source | About |
+|--------|-------|
+| [Anime News Network](https://www.animenewsnetwork.com/) | Industry-leading anime journalism |
+| [Anime Corner](https://animecorner.me/) | Community-driven anime news & polls |
+| [MyAnimeList](https://myanimelist.net/) | The largest anime/manga database |
+| [Otaku USA Magazine](https://otakuusamagazine.com/) | English-language anime culture magazine |
+| [Crunchyroll](https://www.crunchyroll.com/news) | Official streaming platform news |
+| [Anime Herald](https://www.animeherald.com/) | Anime news, reviews & editorials |
+| [Comic Book](https://comicbook.com/anime/) | Anime & manga coverage at ComicBook |
 
 ---
-
-## 🔗 Links
-
-- **API Base URL**: `https://aninews.vercel.app`
-- **Documentation**: [GitHub Repository](https://github.com/Shineii86/AniNewsAPI)
-- **Issues**: [GitHub Issues](https://github.com/Shineii86/AniNewsAPI/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Shineii86/AniNewsAPI/discussions)
-
----
-
-## 💕 Loved My Work?
-
-🚨 [Follow me on GitHub](https://github.com/Shineii86)
-
-⭐ [Give a star to this project](https://github.com/Shineii86/AniNewsAPI)
 
 <div align="center">
 
-<a href="https://github.com/Shineii86/AlisaReactionBot">
-<img src="https://github.com/Shineii86/AniPay/blob/main/Source/Banner6.png" alt="Banner">
-</a>
-  
-  *For inquiries or collaborations*
-     
-[![Telegram Badge](https://img.shields.io/badge/-Telegram-2CA5E0?style=flat&logo=Telegram&logoColor=white)](https://telegram.me/Shineii86 "Contact on Telegram")
-[![Instagram Badge](https://img.shields.io/badge/-Instagram-C13584?style=flat&logo=Instagram&logoColor=white)](https://instagram.com/ikx7.a "Follow on Instagram")
-[![Pinterest Badge](https://img.shields.io/badge/-Pinterest-E60023?style=flat&logo=Pinterest&logoColor=white)](https://pinterest.com/ikx7a "Follow on Pinterest")
-[![Gmail Badge](https://img.shields.io/badge/-Gmail-D14836?style=flat&logo=Gmail&logoColor=white)](mailto:ikx7a@hotmail.com "Send an Email")
+**Built with ❤️ for the anime community**
 
-  <sup><b>Copyright © 2026 <a href="https://telegram.me/Shineii86">Shinei Nouzen</a> All Rights Reserved</b></sup>
+[![Telegram](https://img.shields.io/badge/-Telegram-2CA5E0?style=flat&logo=Telegram&logoColor=white)](https://telegram.me/Shineii86)
+[![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/Shineii86)
+[![Instagram](https://img.shields.io/badge/-Instagram-C13584?style=flat&logo=Instagram&logoColor=white)](https://instagram.com/ikx7.a)
+[![Gmail](https://img.shields.io/badge/-Gmail-D14836?style=flat&logo=Gmail&logoColor=white)](mailto:ikx7a@hotmail.com)
 
-![Last Commit](https://img.shields.io/github/last-commit/Shineii86/AniNewsAPI?style=for-the-badge)
+⭐ [Star this repo](https://github.com/Shineii86/AniNewsAPI) · 🐛 [Report a bug](https://github.com/Shineii86/AniNewsAPI/issues) · 💡 [Request a feature](https://github.com/Shineii86/AniNewsAPI/issues)
 
-<sub>Made With ❤️ For The Anime Community</sub>
-
-</div> 
+</div>

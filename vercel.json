@@ -1,64 +1,31 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "index.js",
-      "use": "@vercel/node"
-    }
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "index.js", "use": "@vercel/node" }
   ],
   "rewrites": [
-    {
-      "source": "/api/health",
-      "destination": "/api/health.js"
-    },
-    {
-      "source": "/api/stats",
-      "destination": "/api/stats.js"
-    },
-    {
-      "source": "/api/cache/clear",
-      "destination": "/api/cache/clear.js"
-    },
-    {
-      "source": "/api/news/tags",
-      "destination": "/api/news/tags.js"
-    },
-    {
-      "source": "/api/news/([^/]+)",
-      "destination": "/api/news/[slug].js?slug=$1"
-    },
-    {
-      "source": "/api/news",
-      "destination": "/api/news.js"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.js"
-    }
+    { "source": "/api/health", "destination": "/api/health.js" },
+    { "source": "/api/stats", "destination": "/api/stats.js" },
+    { "source": "/api/cache/clear", "destination": "/api/cache/clear.js" },
+    { "source": "/api/search", "destination": "/api/search.js" },
+    { "source": "/api/rss", "destination": "/api/rss.js" },
+    { "source": "/api/news/tags", "destination": "/api/news/tags.js" },
+    { "source": "/api/news/([^/]+)", "destination": "/api/news/[slug].js?slug=$1" },
+    { "source": "/api/news", "destination": "/api/news.js" },
+    { "source": "/(.*)", "destination": "/index.js" }
   ],
   "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" },
-        { "key": "Cache-Control", "value": "public, s-maxage=300" }
-      ]
-    },
-    {
-      "source": "/",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Cache-Control", "value": "public, max-age=3600" }
-      ]
-    }
+    { "source": "/api/(.*)", "headers": [
+      { "key": "Access-Control-Allow-Origin", "value": "*" },
+      { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+      { "key": "Access-Control-Allow-Headers", "value": "Content-Type" },
+      { "key": "Cache-Control", "value": "public, s-maxage=300" }
+    ]},
+    { "source": "/", "headers": [
+      { "key": "Access-Control-Allow-Origin", "value": "*" },
+      { "key": "Cache-Control", "value": "public, max-age=3600" }
+    ]}
   ],
-  "env": {
-    "CACHE_TTL": "600"
-  }
+  "env": { "CACHE_TTL": "600" }
 }

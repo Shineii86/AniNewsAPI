@@ -1,69 +1,33 @@
 const cacheHandler = require('../../utils/cacheHandler');
+const { CORS_HEADERS } = require('../../utils/constants');
 
-/**
- * Available tags endpoint
- */
 module.exports = async (req, res) => {
+  Object.entries(CORS_HEADERS).forEach(([k, v]) => res.setHeader(k, v));
+  if (req.method === 'OPTIONS') { res.status(204).end(); return; }
+
   try {
     const { tag, source } = req.query;
-    
-    // Get all cached news
     const cachedNews = cacheHandler.get('news_all') || [];
-    
+
     if (!tag) {
-      // Return available tags
-      const allTags = new Set();
+      const tagCounts = new Map();
       cachedNews.forEach(article => {
-        (article.tags || []).forEach(t => allTags.add(t.toLowerCase()));
+        (article.tags || []).forEach(t => { const n = t.toLowerCase(); tagCounts.set(n, (tagCounts.get(n) || 0) + 1); });
       });
-      
-      return res.json({
-        success: true,
-        data: {
-          tags: Array.from(allTags).sort(),
-          count: allTags.size
-        },
-        meta: {
-          timestamp: new Date().toISOString()
-        }
-      });
+      const tags = Array.from(tagCounts.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
+      return res.json({ success: true, data: { tags, totalTags: tags.length, totalArticles: cachedNews.length }, meta: { timestamp: new Date().toISOString() } });
     }
-    
-    // Filter by tag
+
     const normalizedTag = tag.toLowerCase().trim();
-    let filteredArticles = cachedNews.filter(article => 
-      article.tags?.some(t => t.toLowerCase() === normalizedTag)
-    );
-    
-    // Optional source filter
-    if (source && source !== 'all') {
-      filteredArticles = filteredArticles.filter(article => 
-        article.source.toLowerCase().replace(/\s+/g, '-') === source.toLowerCase()
-      );
-    }
-    
-    // Sort by date
-    filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
-    
+    let filtered = cachedNews.filter(a => a.tags?.some(t => t.toLowerCase() === normalizedTag));
+    if (source && source !== 'all') filtered = filtered.filter(a => a.source.toLowerCase().replace(/\s+/g, '-') === source.toLowerCase());
+    filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Cache-Control', 'public, max-age=300');
-    
-    res.json({
-      success: true,
-      data: filteredArticles,
-      meta: {
-        total: filteredArticles.length,
-        tag: normalizedTag,
-        source: source || 'all',
-        timestamp: new Date().toISOString()
-      }
-    });
+    res.json({ success: true, data: filtered, meta: { total: filtered.length, tag: normalizedTag, source: source || 'all', timestamp: new Date().toISOString() } });
   } catch (error) {
     console.error('[Tags API] Error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to filter by tag',
-      message: error.message
-    });
+    res.status(500).json({ success: false, error: 'Failed to filter by tag', message: error.message });
   }
 };
