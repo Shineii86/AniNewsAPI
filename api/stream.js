@@ -1,26 +1,26 @@
 const { APP_NAME, APP_VERSION } = require('../utils/constants');
+const cacheHandler = require('../utils/cacheHandler');
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('X-Accel-Buffering', 'no');
 
-  // Send initial connection event
+  // Send connected event
   res.write(`data: ${JSON.stringify({ type: 'connected', name: APP_NAME, version: APP_VERSION })}\n\n`);
 
-  // Heartbeat every 30s to keep connection alive
-  const heartbeat = setInterval(() => {
-    res.write(`data: ${JSON.stringify({ type: 'heartbeat', timestamp: new Date().toISOString() })}\n\n`);
-  }, 30000);
+  // Send current article count
+  const cached = cacheHandler.get('news_all');
+  const count = Array.isArray(cached) ? cached.length : 0;
+  res.write(`data: ${JSON.stringify({ type: 'status', articles: count, timestamp: new Date().toISOString() })}\n\n`);
 
-  // Note: In production, this would hook into the cache layer
-  // to broadcast new articles as they're fetched. For now, clients
-  // can poll /api/news with the latest date to detect new articles.
-  // A future version will wire this into the scraper pipeline.
+  // Send heartbeat immediately (Vercel functions timeout at 10s on Hobby)
+  res.write(`data: ${JSON.stringify({ type: 'heartbeat', timestamp: new Date().toISOString() })}\n\n`);
 
-  req.on('close', () => {
-    clearInterval(heartbeat);
-  });
+  // Close after initial burst — Vercel serverless can't hold long-lived connections
+  // Clients should poll /api/news with ?refresh=true for fresh data
+  res.write(`data: ${JSON.stringify({ type: 'info', message: 'SSE initial burst complete. Poll /api/news for updates.' })}\n\n`);
+  res.end();
 };

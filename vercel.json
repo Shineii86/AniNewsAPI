@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/robots.txt", "destination": "/index" },
+    { "source": "/sitemap.xml", "destination": "/index" },
     { "source": "/api/news/tags", "destination": "/api/news/tags" },
     { "source": "/api/news/([^/]+)", "destination": "/api/news/[slug]?slug=$1" },
     { "source": "/(.*)", "destination": "/" }

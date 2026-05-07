@@ -1632,7 +1632,7 @@
   <script>
     (async function() {
       const REPO = 'Shineii86/AniNewsAPI';
-      const BASE = 'https://aninews.vercel.app';
+      const BASE = window.location.origin;
       const api = (endpoint) => fetch(`https://api.github.com/${endpoint}`, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       }).then(r => r.ok ? r.json() : null).catch(() => null);
@@ -1736,7 +1736,7 @@
   <!-- Try It Live -->
   <script>
     (function() {
-      const BASE = 'https://aninews.vercel.app';
+      const BASE = window.location.origin;
       const btn = document.getElementById('tryit-run');
       const endpoint = document.getElementById('tryit-endpoint');
       const params = document.getElementById('tryit-params');

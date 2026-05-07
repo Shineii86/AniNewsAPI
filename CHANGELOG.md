@@ -4,6 +4,20 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [4.0.3] - 2026-05-08
+
+### Fixed
+- **SSE timeout crash**: `/api/stream` used `setInterval` which exceeds Vercel's 10s function timeout. Replaced with single-burst response that sends status + heartbeat + info then closes.
+- **Playground hardcoded URL**: Try-It-Live panel now uses `window.location.origin` instead of hardcoded `https://aninews.vercel.app`, enabling local dev testing.
+
+### Added
+- **`robots.txt`**: Served at `/robots.txt` allowing all crawlers, disallowing `/api/`, with sitemap reference.
+- **`sitemap.xml`**: Served at `/sitemap.xml` with main page, features, docs, and sources sections.
+- **Actual rate limiting**: In-memory per-IP rate limiter (100 req/min) on all `/api` routes. Returns 429 with `retryAfter` when exceeded. Buckets auto-clean every 5 minutes.
+- **Landing page memory cache**: `index.js` now caches `index.html` in memory and only re-reads from disk when file mtime changes.
+
+---
+
 ## [4.0.2] - 2026-05-08
 
 ### Fixed
