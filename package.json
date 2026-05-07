@@ -18,7 +18,7 @@
     "rss-parser": "^3.13.0"
   },
   "engines": {
-    "node": ">=18.x"
+    "node": ">=20.x"
   },
   "keywords": ["anime", "news", "api", "scraping", "manga"],
   "author": "Shinei Nouzen",

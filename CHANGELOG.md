@@ -4,6 +4,15 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [4.0.5] - 2026-05-08
+
+### Fixed
+- **Node engine**: Updated from `>=18.x` (EOL April 2025) to `>=20.x`
+- **RSS auto-discovery**: Added `<link rel="alternate" type="application/rss+xml">` to landing page `<head>` so browsers and feed readers can detect the RSS feed
+- **Test suite overhaul**: Updated `test.js` to use dynamic version from constants, added tests for SSE stream, OpenAPI spec, landing page, 404 handler, sort parameter, and error cases
+
+---
+
 ## [4.0.4] - 2026-05-08
 
 ### Added
