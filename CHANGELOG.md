@@ -4,6 +4,14 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [4.0.2] - 2026-05-08
+
+### Fixed
+- **CRITICAL: Vercel FUNCTION_INVOCATION_FAILED crash**: `cacheHandler.js` used `fs.mkdirSync` on a read-only filesystem at module load time. On Vercel serverless, only `/tmp` is writable. Now detects serverless environment and uses `/tmp/aninews-cache` instead. Wrapped directory creation in try-catch.
+- **Removed legacy `builds` from `vercel.json`**: Modern Vercel auto-detects `api/` routes. The `builds` config was conflicting with zero-config mode.
+
+---
+
 ## [4.0.1] - 2026-05-08
 
 ### Changed

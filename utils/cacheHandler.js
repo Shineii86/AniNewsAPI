@@ -3,7 +3,9 @@ const fs = require('fs');
 const path = require('path');
 
 const CACHE_TTL = parseInt(process.env.CACHE_TTL) || 600; // 10 minutes default (reduced from 15)
-const CACHE_DIR = path.join(__dirname, '../data');
+// On Vercel/serverless, filesystem is read-only except /tmp
+const IS_SERVERLESS = !!process.env.VERCEL || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+const CACHE_DIR = IS_SERVERLESS ? path.join('/tmp', 'aninews-cache') : path.join(__dirname, '../data');
 
 const cache = new NodeCache({ 
   stdTTL: CACHE_TTL, 
@@ -13,8 +15,12 @@ const cache = new NodeCache({
 });
 
 // Create data directory if not exists
-if (!fs.existsSync(CACHE_DIR)) {
-  fs.mkdirSync(CACHE_DIR, { recursive: true });
+try {
+  if (!fs.existsSync(CACHE_DIR)) {
+    fs.mkdirSync(CACHE_DIR, { recursive: true });
+  }
+} catch (e) {
+  console.warn('[Cache] Could not create cache directory:', e.message);
 }
 
 // Cache statistics
