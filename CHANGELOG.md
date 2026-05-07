@@ -4,6 +4,28 @@ All notable changes to **AniNewsAPI** will be documented in this file.
 
 ---
 
+## [3.1.0] - 2026-05-08
+
+### Changed
+- **Frontend Complete Redesign** (`public/index.html`): Rebuilt landing page from scratch with a modern, distinctive aesthetic
+  - Switched from Inter/JetBrains Mono to **Space Grotesk / Space Mono** font pairing for sharper visual identity
+  - Replaced Catppuccin color scheme with a **violet/pink/cyan accent palette** on a deep dark base (`#0a0a0f`)
+  - Added **ambient floating orb background** with blur and infinite float animation for depth
+  - Added **noise texture overlay** via inline SVG for subtle grain
+  - Introduced **glassmorphism sticky header** with `backdrop-filter: blur(20px) saturate(1.5)`
+  - Redesigned hero with **animated gradient shimmer** on headline, status badge with live pulse dot, and **interactive terminal preview** showing a live `curl` response with blinking cursor
+  - Replaced stat cards with a **stats ribbon** using a 1px-gap grid layout and color-coded numbers
+  - Replaced feature card grid with **borderless grid** using top-border reveal animation on hover
+  - Replaced documentation endpoint blocks with **collapsible accordion cards** — click to expand/collapse details
+  - Added **sources grid** with per-source cards showing scrape method badges (RSS / Scrape)
+  - Redesigned CTA section with a **gradient-topped card** and metadata row (stars, contributors, license)
+  - Replaced footer with a **compact single-row layout** with social icon buttons
+  - Added **scroll-reveal animations** via IntersectionObserver for progressive content loading
+  - Improved **mobile responsiveness** with hamburger toggle, stacked grids, and fluid typography via `clamp()`
+  - Reduced external dependencies: removed Font Awesome heavy load, kept only icon subset needed
+
+---
+
 ## [3.0.0] - 2026-05-08
 
 ### Added
